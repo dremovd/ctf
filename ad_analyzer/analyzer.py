@@ -15,6 +15,22 @@ SERVICE_ROOT = '/Users/dmitry/projects/ctf-training/amogus_plus_plus'
 from typing import List, Tuple
 import os
 
+IGNORE_FILENAMES_LIST = set([
+    '.DS_Store',
+    'LICENSE',
+    'README.md',
+    'package-lock.json',
+    '.prettierrc',
+    '.prettierignore',
+])
+IGNORE_FILENAMES_PREFIXES = [
+    '.git',
+    '.idea',
+    '.vscode',
+    '__pycache__',
+    'venv',
+]
+
 MAX_TOKENS = 4096
 
 def is_binary_file(filepath: str) -> bool:
@@ -52,20 +68,6 @@ def list_service_directory(service_root: str, debug: bool = False) -> Tuple[List
             extension = os.path.splitext(filename)[1]
             filename = os.path.basename(filename)
 
-            IGNORE_FILENAMES_LIST = set([
-                '.DS_Store',
-                'LICENSE',
-                'README.md',
-                'package-lock.json',
-                '.prettierrc',
-            ])
-            IGNORE_FILENAMES_PREFIXES = [
-                '.git',
-                '.idea',
-                '.vscode',
-                '__pycache__',
-                'venv',
-            ]
             need_skip = False
             is_binary = is_binary_file(filepath)
 
