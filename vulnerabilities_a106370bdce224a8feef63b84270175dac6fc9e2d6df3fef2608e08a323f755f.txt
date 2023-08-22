@@ -1,0 +1,826 @@
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/.env
+Path: .env
+Vulnerability: Hardcoded Secrets
+Relevant code:
+MYSQL_PASSWORD="goldDigger"
+
+MYSQL_ROOT_PASSWORD="secretPassw0rd"
+
+Description: The application source code contains hardcoded secrets. This is a serious security risk as anyone who has access to the source code can retrieve these secrets and use them to gain unauthorized access to resources.
+Severity: High
+Fix: Remove hardcoded secrets from the source code. Use secure environment variables to store sensitive information.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/.env
+Path: .env
+Vulnerability: Weak Cryptography
+Relevant code:
+MYSQL_USER="goldTrigger"
+
+MYSQL_PASSWORD="goldDigger"
+
+MYSQL_ROOT_PASSWORD="secretPassw0rd"
+
+Description: The application uses weak and easily guessable passwords. This can lead to unauthorized access if an attacker is able to guess these passwords.
+Severity: High
+Fix: Use strong, complex, and unique passwords. Consider implementing a password policy that enforces this.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/.env
+Path: .env
+Vulnerability: Security Misconfiguration
+Relevant code:
+PORT=9993
+
+Description: The application is configured to use a non-standard port. This can lead to security issues if the port is not properly secured.
+Severity: Medium
+Fix: Ensure that all ports used by the application are properly secured. Consider using standard ports to reduce the risk of misconfiguration.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/docker-compose.yml
+Path: docker-compose.yml
+Vulnerability: Sensitive Data Exposure
+Relevant code:
+env_file: .env
+Description: The .env file is used to store sensitive information such as API keys, database credentials, etc. If this file is exposed, it can lead to unauthorized access to these sensitive data.
+Severity: High
+Fix: Move the .env file to a secure location and restrict its access. Use environment variables to pass the sensitive data to the application.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/docker-compose.yml
+Path: docker-compose.yml
+Vulnerability: Using Components with Known Vulnerabilities
+Relevant code:
+image: mysql:latest
+Description: Using the 'latest' tag for Docker images can lead to the use of outdated or vulnerable versions of software. It's better to specify the version of the software explicitly.
+Severity: Medium
+Fix: Specify the version of the MySQL image explicitly, e.g., 'image: mysql:5.7'. Regularly update the version as new patches and updates are released.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/docker-compose.yml
+Path: docker-compose.yml
+Vulnerability: Security Misconfiguration
+Relevant code:
+ports:
+
+      - 9993:9993
+Description: Exposing unnecessary ports can lead to potential security risks. Only necessary ports should be exposed, and they should be secured properly.
+Severity: Medium
+Fix: Only expose necessary ports and secure them properly. Use firewall rules and network policies to restrict access to these ports.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/go.mod
+Path: src/go.mod
+Vulnerability: Using Components with Known Vulnerabilities
+Relevant code:
+github.com/golang-jwt/jwt/v4 v4.5.0
+Description: The project is using an outdated version of the 'github.com/golang-jwt/jwt' library. This could potentially expose the application to known vulnerabilities that have been fixed in later versions.
+Severity: High
+Fix: Update 'github.com/golang-jwt/jwt' to the latest version.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/go.mod
+Path: src/go.mod
+Vulnerability: Using Components with Known Vulnerabilities
+Relevant code:
+gorm.io/driver/mysql v1.5.1
+Description: The project is using an outdated version of the 'gorm.io/driver/mysql' library. This could potentially expose the application to known vulnerabilities that have been fixed in later versions.
+Severity: High
+Fix: Update 'gorm.io/driver/mysql' to the latest version.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/go.mod
+Path: src/go.mod
+Vulnerability: Using Components with Known Vulnerabilities
+Relevant code:
+github.com/gin-gonic/gin v1.9.1
+Description: The project is using an outdated version of the 'github.com/gin-gonic/gin' library. This could potentially expose the application to known vulnerabilities that have been fixed in later versions.
+Severity: High
+Fix: Update 'github.com/gin-gonic/gin' to the latest version.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/go.mod
+Path: src/go.mod
+Vulnerability: Using Components with Known Vulnerabilities
+Relevant code:
+golang.org/x/crypto v0.11.0
+Description: The project is using an outdated version of the 'golang.org/x/crypto' library. This could potentially expose the application to known vulnerabilities that have been fixed in later versions.
+Severity: High
+Fix: Update 'golang.org/x/crypto' to the latest version.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/Dockerfile
+Path: src/Dockerfile
+Vulnerability: Insecure Data Storage
+Relevant code:
+COPY . .
+Description: The Dockerfile copies all files from the current directory to the Docker image. This could potentially include sensitive data such as configuration files, secret keys, etc.
+Severity: High
+Fix: Specify the necessary files and directories to be copied into the Docker image. Avoid using 'COPY . .' command.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/Dockerfile
+Path: src/Dockerfile
+Vulnerability: Using Components with Known Vulnerabilities
+Relevant code:
+RUN apk update
+Description: The Dockerfile updates the packages in the image but does not upgrade them. This could leave the image with outdated packages that have known vulnerabilities.
+Severity: Medium
+Fix: Add 'RUN apk upgrade' after 'RUN apk update' to ensure all packages are upgraded to their latest versions.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/Dockerfile
+Path: src/Dockerfile
+Vulnerability: Security Misconfiguration
+Relevant code:
+FROM scratch
+Description: The Dockerfile uses 'scratch' as a base image for the second build stage. This means the resulting image will not have any shell or utilities, making it difficult to troubleshoot issues.
+Severity: Low
+Fix: Consider using a minimal base image that includes a shell and basic utilities for the second build stage.
+
+FILE END
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/routes.go
+Path: src/routes.go
+Vulnerability: Broken Authentication
+Relevant code:
+c.SetCookie("token", sessionToken, 3600, "/", "localhost:8080", false, true)
+c.SetCookie("userID", fmt.Sprintf("%v", id), 3600, "/", "", false, true)
+c.Set("userID", id)
+Description: The application sets cookies for authentication without the secure flag, which can lead to exposure of session tokens if the application is accessed over an unencrypted connection.
+Severity: High
+Fix: Set the secure flag to true when setting cookies: c.SetCookie("token", sessionToken, 3600, "/", "localhost:8080", true, true)
+c.SetCookie("userID", fmt.Sprintf("%v", id), 3600, "/", "", true, true)
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/routes.go
+Path: src/routes.go
+Vulnerability: Password Management Weaknesses
+Relevant code:
+id, token, err := userController.RegisterUser(newUserData.Username, newUserData.Password)
+Description: The application appears to handle passwords in plaintext when registering a new user. This can lead to exposure of user passwords if the database is compromised.
+Severity: Critical
+Fix: Hash and salt passwords before storing them in the database. Use a strong cryptographic hash function such as bcrypt or Argon2.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/routes.go
+Path: src/routes.go
+Vulnerability: Broken Access Control
+Relevant code:
+id, _ := c.Cookie("userID")
+userID, _ := strconv.Atoi(id)
+Description: The application retrieves the user ID from a cookie without validating it. This can lead to unauthorized access if an attacker modifies the cookie.
+Severity: High
+Fix: Implement server-side session management and validate the user ID server-side instead of relying on client-side cookies.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/routes.go
+Path: src/routes.go
+Vulnerability: Using Components with Known Vulnerabilities
+Relevant code:
+"github.com/YellowPhil/pwnAD/controllers"
+Description: The application uses a third-party library for which the security status is unknown. This can lead to exploitation of known vulnerabilities in the library.
+Severity: Medium
+Fix: Regularly update all third-party libraries to the latest version and review their security status.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/middleware.go
+Path: src/middleware.go
+Vulnerability: Broken Authentication
+Relevant code:
+tokenString, err := c.Cookie("token")
+Description: The authentication token is being retrieved from a cookie. This can lead to session hijacking if the cookie is stolen.
+Severity: High
+Fix: Use secure and httpOnly cookies to store tokens. Implement additional measures such as IP validation and user agent validation.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/middleware.go
+Path: src/middleware.go
+Vulnerability: Sensitive Data Exposure
+Relevant code:
+if id, err := (c.Cookie("userID")); err == nil {
+
+			userID, err := strconv.Atoi(id)
+Description: The user ID is being stored in a cookie. This can lead to user impersonation if the cookie is stolen.
+Severity: High
+Fix: Do not store sensitive information such as user IDs in cookies. Use server-side sessions instead.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/middleware.go
+Path: src/middleware.go
+Vulnerability: Broken Authentication
+Relevant code:
+if err := controllers.ValidateToken(tokenString, uint(userID)); err != nil
+Description: The token validation function may not be implemented correctly. If the token is not validated properly, it can lead to unauthorized access.
+Severity: High
+Fix: Ensure that the ValidateToken function checks the token's signature and expiry date. Also, make sure that it verifies the user ID stored in the token.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/main.go
+Path: src/main.go
+Vulnerability: Security Misconfiguration
+Relevant code:
+router = gin.Default()
+Description: The application is using the default configuration of the gin framework. This could potentially expose the application to various security risks if the default configuration is not secure.
+Severity: Medium
+Fix: Define a custom configuration for the gin framework that is tailored to the security needs of your application.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/main.go
+Path: src/main.go
+Vulnerability: Broken Authentication
+Relevant code:
+if token, err := c.Cookie("token"); err == nil && token != "" {
+
+		data["Authorized"] = true
+
+	} else {
+
+		data["Authorized"] = false
+
+	}
+Description: The application is using cookies for authentication without any apparent encryption or signature, which can be vulnerable to attacks such as session hijacking or session sidejacking.
+Severity: High
+Fix: Use secure and httpOnly cookies. Also, consider using a secure method for session management such as JWT (JSON Web Tokens) with proper encryption.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/main.go
+Path: src/main.go
+Vulnerability: Cross-Site Scripting (XSS)
+Relevant code:
+router.LoadHTMLGlob("templates/*")
+Description: The application is directly loading HTML templates which could potentially lead to Cross-Site Scripting (XSS) if user input is not properly sanitized before being inserted into HTML content.
+Severity: High
+Fix: Ensure that user input is properly sanitized before being inserted into HTML content. Consider using a template engine that automatically escapes user input.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/main.go
+Path: src/main.go
+Vulnerability: Hardcoded Secrets
+Relevant code:
+db, _ := controllers.Setup()
+Description: The application seems to be setting up a database connection in the 'controllers.Setup()' function. If there are hardcoded secrets such as database credentials, it could lead to unauthorized access to the database.
+Severity: High
+Fix: Remove any hardcoded secrets from the source code. Use environment variables or a secure configuration file to store secrets.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/main.go
+Path: src/main.go
+Vulnerability: Broken Access Control
+Relevant code:
+userRoutes := router.Group("/user")
+Description: The application seems to be grouping routes under '/user' without any apparent access control mechanism. This could potentially allow unauthorized users to access these routes.
+Severity: High
+Fix: Implement an access control mechanism to restrict access to certain routes based on user roles or permissions.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/templates/index.html
+Path: src/templates/index.html
+Vulnerability: Broken Authentication
+Relevant code:
+{{ if ne .Authorized true }}
+Description: The code checks if the user is not authorized, but it does not provide any mechanism for authentication. This could allow unauthorized users to gain access to the system.
+Severity: High
+Fix: Implement a proper authentication mechanism. For example, use a secure session management system and enforce strong password policies.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/templates/index.html
+Path: src/templates/index.html
+Vulnerability: Sensitive Data Exposure
+Relevant code:
+{{ range .publicResults }}
+Description: The code is exposing potentially sensitive data (publicResults) to the public. This could lead to unauthorized access to sensitive information.
+Severity: Medium
+Fix: Ensure that only necessary data is exposed to the public. Sensitive data should be properly protected and should not be exposed without proper authorization.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/templates/index.html
+Path: src/templates/index.html
+Vulnerability: Injection Attacks
+Relevant code:
+{{ template "header.html" .}}
+{{ template "footer.html" .}}
+Description: The code is using user-supplied input (.Authorized, .publicResults) in templates without proper sanitization. This could lead to injection attacks.
+Severity: High
+Fix: Sanitize user-supplied input before using it in templates. Use a secure templating system that automatically escapes user input.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/templates/registration-successful.html
+Path: src/templates/registration-successful.html
+Vulnerability: Cross-Site Scripting (XSS)
+Relevant code:
+{{ template "header.html" .}}
+
+{{ template "footer.html" .}}
+Description: Untrusted data inserted into HTML. The code is embedding HTML templates without sanitizing or validating the data.
+Severity: High
+Fix: Use a secure method to embed HTML templates that automatically escapes any untrusted data.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/templates/input-lab.html
+Path: src/templates/input-lab.html
+Vulnerability: Cross-Site Scripting (XSS)
+Relevant code:
+{{ .Username }}
+Description: Untrusted data inserted into HTML. The username is being inserted into the HTML without any sanitization, which could allow for a Cross-Site Scripting (XSS) attack if a user's username contains malicious script.
+Severity: High
+Fix: Sanitize the .Username variable before inserting it into the HTML. This can be done using a function that escapes special characters.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/templates/input-lab.html
+Path: src/templates/input-lab.html
+Vulnerability: Cross-Site Request Forgery (CSRF)
+Relevant code:
+<form action="/labs/new" method="POST">
+Description: Forged requests made by user. The form does not contain any anti-CSRF tokens, which could allow for a Cross-Site Request Forgery (CSRF) attack where a malicious site tricks a user's browser into making a request to this site.
+Severity: High
+Fix: Add an anti-CSRF token to the form. This can be done by generating a unique token for each session or request, and verifying the token on the server side before processing the form data.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/templates/register.html
+Path: src/templates/register.html
+Vulnerability: Broken Authentication
+Relevant code:
+<form class="form" action="/user/register" method="POST">
+Description: The form posts data to the '/user/register' route without any CSRF protection. This could allow an attacker to forge a request on behalf of the user.
+Severity: High
+Fix: Add a CSRF token to the form. For example: <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/templates/register.html
+Path: src/templates/register.html
+Vulnerability: Password Management Weaknesses
+Relevant code:
+<input type="password" name="password" required="required" class="form-control" id="password" placeholder="Password">
+Description: The password input field does not have any complexity requirements or restrictions. This could allow users to create weak passwords that are easy for attackers to guess.
+Severity: Medium
+Fix: Implement password complexity requirements and validate them on the server side. For example, require a minimum length, a mix of upper and lower case letters, numbers, and special characters.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/templates/register.html
+Path: src/templates/register.html
+Vulnerability: Information Leakage
+Relevant code:
+{{.ErrorTitle}}: {{.ErrorMessage}}
+Description: The error messages are directly displayed on the page. This could expose sensitive information to the user or provide useful information to an attacker.
+Severity: Low
+Fix: Implement a custom error handling system that only displays generic error messages to the user. Detailed error information should be logged on the server side for debugging.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/templates/login-successful.html
+Path: src/templates/login-successful.html
+Vulnerability: Cross-Site Scripting (XSS)
+Relevant code:
+{{ template "header.html" .}}
+
+
+
+<div>
+
+  You have successfully logged in.
+
+</div>
+
+
+
+<!--Embed the footer.html template at this location-->
+
+{{ template "footer.html" .}}
+Description: Untrusted data inserted into HTML; Look for unsanitized user input in HTML content.
+Severity: High
+Fix: Ensure all user inputs are properly sanitized before being inserted into HTML content. Use context specific output encoding/escaping before inserting user input into HTML content.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/templates/menu.html
+Path: src/templates/menu.html
+Vulnerability: Broken Access Control
+Relevant code:
+{{if (eq .Authorized true) }}
+Description: The code checks if the user is authorized but does not verify the role of the user. This could allow users to perform unauthorized actions.
+Severity: High
+Fix: Implement role-based access control. Check the role of the user in addition to checking if they are authorized.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/templates/login.html
+Path: src/templates/login.html
+Vulnerability: Broken Authentication
+Relevant code:
+<form class="form" action="/user/login" method="POST">
+
+      <div class="form-group">
+
+        <label for="username">Username</label>
+
+        <input type="text" class="form-control" id="username" name="username" required="required" placeholder="Username">
+
+      </div>
+
+      <div class="form-group">
+
+        <label for="password">Password</label>
+
+        <input type="password" class="form-control" id="password" name="password" required="required" placeholder="Password">
+
+      </div>
+
+      <button type="submit" class="btn btn-primary">Login</button>
+
+    </form>
+Description: The login form does not implement any form of captcha or multi-factor authentication, which makes it susceptible to brute force attacks.
+Severity: High
+Fix: Implement a captcha system or multi-factor authentication to prevent brute force attacks.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/templates/login.html
+Path: src/templates/login.html
+Vulnerability: Information Leakage
+Relevant code:
+{{ if .ErrorTitle}}
+
+    <p class="bg-danger">
+
+      {{.ErrorTitle}}: {{.ErrorMessage}}
+
+    </p>
+
+    {{end}}
+Description: Detailed error messages are being displayed to the user, which could potentially expose sensitive information.
+Severity: Medium
+Fix: Modify error handling to display generic error messages to the user and log detailed error messages for internal use.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/templates/login.html
+Path: src/templates/login.html
+Vulnerability: Cross-Site Request Forgery (CSRF)
+Relevant code:
+<form class="form" action="/user/login" method="POST">
+Description: The form does not implement any anti-CSRF tokens, which makes it susceptible to CSRF attacks.
+Severity: High
+Fix: Implement anti-CSRF tokens in the form to prevent CSRF attacks.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/templates/labs.html
+Path: src/templates/labs.html
+Vulnerability: Cross-Site Scripting (XSS)
+Relevant code:
+{{ range .payload }}
+
+    <div class="col-4 col-sm-4 col-md-3 col-xl-2 center">
+
+        <p>Название: {{.LabName}} </p>
+
+        <p>Результат: {{.TestResult }}</p>
+
+        <p>Теоретическое Значение: {{.Expected}} </p>
+
+        <p>Погрешность: {{.Error}}</p>
+
+        <p>Причина погрешности: {{.Comment}}</p>
+
+    </div>
+
+{{end}}
+Description: Untrusted data inserted into HTML; Look for unsanitized user input in HTML content.
+Severity: High
+Fix: Sanitize user input before inserting into HTML. Use context specific encoding when modifying the browser document on the client side. Use appropriate response headers to prevent XSS in HTTP responses.
+
+FILE END
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/templates/header.html
+Path: src/templates/header.html
+Vulnerability: Using Components with Known Vulnerabilities
+Relevant code:
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <script async src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+Description: The project is using an outdated version of Bootstrap (3.3.6). This version may contain known vulnerabilities that can be exploited.
+Severity: High
+Fix: Update the Bootstrap library to the latest stable version.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/templates/header.html
+Path: src/templates/header.html
+Vulnerability: Cross-Site Scripting (XSS)
+Relevant code:
+{{ .title }}
+Description: Unsanitized user input is being inserted into HTML. This can lead to Cross-Site Scripting (XSS) attacks if the title is user-controlled and not properly sanitized.
+Severity: Medium
+Fix: Sanitize the '.title' input before inserting it into HTML.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/controllers/models.go
+Path: src/controllers/models.go
+Vulnerability: Information Leakage
+Relevant code:
+type LabExistsError struct {
+
+	msg string
+
+}
+
+
+
+func (e *LabExistsError) Error() string { return e.msg }
+
+
+
+type InvalidDataError struct {
+
+	msg string
+
+}
+
+
+
+func (e *InvalidDataError) Error() string { return e.msg }
+
+Description: The error messages might expose sensitive information about the system's internal workings. Detailed error messages can provide attackers with insights into potential vulnerabilities.
+Severity: Medium
+Fix: Implement a custom error handler that returns generic error messages to the user. Detailed error information should be logged for debugging purposes, but not displayed to the user.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/controllers/userController.go
+Path: src/controllers/userController.go
+Vulnerability: Weak Cryptography
+Relevant code:
+func (user *User) HashPassword() error {
+
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+
+	if err != nil {
+
+		return err
+
+	}
+
+	user.Password = string(hashedPassword)
+
+	user.Username = html.EscapeString(strings.TrimSpace(user.Username))
+
+	return nil
+
+}
+Description: The bcrypt.DefaultCost is used for hashing the password. This may not provide sufficient security for password storage.
+Severity: High
+Fix: Increase the cost factor of the bcrypt algorithm to a higher value to make the hashing process more computationally intensive.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/controllers/userController.go
+Path: src/controllers/userController.go
+Vulnerability: Broken Authentication
+Relevant code:
+func (c *UserController) RegisterUser(username, password string) (uint, string, error) {
+
+	NewUser := &User{Username: username, Password: password}
+
+	NewUser.HashPassword()
+
+
+
+	if err := c.db.Create(NewUser).Error; err != nil {
+
+		return 0, "", err
+
+	}
+
+	token, err := GenerateToken(NewUser)
+
+	if err != nil {
+
+		return 0, "", err
+
+	}
+
+	return NewUser.ID, token, nil
+
+}
+Description: The function does not check for weak passwords during user registration. This can lead to weak user accounts that can be easily compromised.
+Severity: High
+Fix: Implement a strong password policy. Check the password strength before hashing and storing it.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/controllers/userController.go
+Path: src/controllers/userController.go
+Vulnerability: Sensitive Data Exposure
+Relevant code:
+func (c *UserController) CheckLoginUser(username, password string) (uint, string, error) {
+
+	user := &User{}
+
+	if err := c.db.Where(&User{Username: username}).First(user).Error; err != nil {
+
+		return 0, "", err
+
+	}
+
+	if err := verifyPassword(user.Password, password); err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
+
+		return 0, "", fmt.Errorf("Invalid password for user %s", username)
+
+	}
+
+	token, err := GenerateToken(user)
+
+	if err != nil {
+
+		return 0, "", err
+
+	}
+
+	return user.ID, token, nil
+
+}
+Description: The function returns a token after successful login. If this token is not securely transmitted or stored, it can lead to unauthorized access.
+Severity: Medium
+Fix: Ensure that the token is transmitted over a secure channel and stored securely on the client side.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/controllers/controller.go
+Path: src/controllers/controller.go
+Vulnerability: Password Management Weaknesses
+Relevant code:
+func (c *Controller) RegisterUser(username, password string) error {
+
+	NewUser := &User{Username: username, Password: password}
+
+	NewUser.HashPassword()
+
+
+
+	if err := c.db.Create(NewUser).Error; err != nil {
+
+		return errors.New("Could not register user")
+
+	}
+
+	return nil
+
+}
+Description: The password is being stored in plain text before being hashed. This can lead to potential exposure of sensitive data.
+Severity: High
+Fix: The password should be hashed immediately upon receipt, before being stored in any variable or database. The corrected code would look like this:
+
+func (c *Controller) RegisterUser(username, password string) error {
+
+	NewUser := &User{Username: username, Password: HashPassword(password)}
+
+	if err := c.db.Create(NewUser).Error; err != nil {
+
+		return errors.New("Could not register user")
+
+	}
+
+	return nil
+
+}
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/controllers/controller.go
+Path: src/controllers/controller.go
+Vulnerability: Broken Authentication
+Relevant code:
+func (c *Controller) CheckLoginUser(username, password string) (string, error) {
+
+	user := &User{}
+
+
+
+	if err := c.db.Model(User{}).Where("username = ?", username).Take(user).Error; err != nil {
+
+		return "", err
+
+	}
+
+
+
+	if err := verifyPassword(user.Password, password); err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
+
+		return "", fmt.Errorf("Invalid password for user %s", username)
+
+	}
+
+
+
+	token, err := GenerateToken(user)
+
+	if err != nil {
+
+		return "", err
+
+	}
+
+
+
+	return token, nil
+
+}
+Description: The system does not implement account lockout or delay after a certain number of failed login attempts. This allows for potential brute force attacks.
+Severity: Medium
+Fix: Implement a mechanism to lock out an account or delay further login attempts after a certain number of failed attempts. This can be done using a counter that increments with each failed attempt and resets after a successful login or after a certain period of time.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/controllers/setup.go
+Path: src/controllers/setup.go
+Vulnerability: Hardcoded Secrets
+Relevant code:
+dsn := fmt.Sprintf("%s:%s@tcp(database:3306)/%s?charset=utf8&parseTime=true", login, password, dbname)
+Description: The database connection string is being constructed with environment variables which might contain sensitive information like username and password. If these are hardcoded or not properly secured, it could lead to unauthorized access.
+Severity: High
+Fix: Use secure methods to store and retrieve sensitive data like database credentials. Consider using secret management solutions.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/controllers/setup.go
+Path: src/controllers/setup.go
+Vulnerability: Security Misconfiguration
+Relevant code:
+if err = db.AutoMigrate(&User{}, &LabResult{}); err != nil
+Description: The code is automatically migrating the database which could lead to potential issues if the User or LabResult structures are changed. This could lead to data loss or corruption.
+Severity: Medium
+Fix: Ensure proper database migration strategies. Avoid auto migration in production environments.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/controllers/jwt.go
+Path: src/controllers/jwt.go
+Vulnerability: Hardcoded Secrets
+Relevant code:
+const key = "SEСREТ_KEY"
+Description: The secret key for JWT token generation and validation is hardcoded in the source code. This is a security risk as anyone with access to the source code can use this key to generate and validate tokens.
+Severity: High
+Fix: The secret key should be stored in a secure and encrypted configuration file or environment variable that is not included in the source code. The key should then be loaded into the application at runtime.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/controllers/jwt.go
+Path: src/controllers/jwt.go
+Vulnerability: Weak Cryptography
+Relevant code:
+func GenerateToken(user *User) (string, error) {
+
+	expirationTime := time.Now().Add(1 * time.Hour)
+
+	claims := &JWTClaim{Id: user.ID, Authorized: true,
+
+		StandardClaims: jwt.StandardClaims{
+
+			ExpiresAt: expirationTime.Unix(),
+
+		}}
+
+
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	return token.SignedString([]byte(key))
+
+}
+Description: The JWT token is signed using HS256 algorithm. This algorithm is known to be vulnerable to brute force attacks if the secret key is not strong enough.
+Severity: Medium
+Fix: Use a stronger signing algorithm such as RS256, ES256, or PS256. These algorithms use asymmetric keys, which provide a higher level of security.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/controllers/labContoller.go
+Path: src/controllers/labContoller.go
+Vulnerability: Broken Access Control
+Relevant code:
+lc.db.First(&user, id)
+
+	lc.db.Model(user).Association("Labs").Find(&tmp)
+Description: The code is directly accessing the database without any checks for user permissions. This could allow unauthorized users to access and manipulate data.
+Severity: High
+Fix: Implement role-based access controls and verify user permissions before accessing the database.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/controllers/labContoller.go
+Path: src/controllers/labContoller.go
+Vulnerability: Injection Attacks
+Relevant code:
+lc.db.Where("abs(expected - ?) <= ?  AND abs( test_result - ?) <= ?", expectedResult, searchEps, testResult, searchEps).First(&labResult).Error
+Description: The code is directly inserting user input into a SQL query. This could allow an attacker to perform SQL injection attacks.
+Severity: High
+Fix: Use parameterized queries or prepared statements to prevent SQL injection attacks.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/controllers/labContoller.go
+Path: src/controllers/labContoller.go
+Vulnerability: Insecure Data Storage
+Relevant code:
+lc.db.First(&user, userID)
+
+	return lc.db.Model(&user).Association("Labs").Append(newLab)
+Description: The code is storing user data without any apparent encryption or hashing. This could expose sensitive user data if the database is compromised.
+Severity: Medium
+Fix: Encrypt or hash sensitive user data before storing it in the database.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/controllers/labContoller.go
+Path: src/controllers/labContoller.go
+Vulnerability: Using Components with Known Vulnerabilities
+Relevant code:
+"gorm.io/gorm"
+Description: The code is using the GORM library for database operations. If this library is outdated, it could contain known vulnerabilities that an attacker could exploit.
+Severity: Medium
+Fix: Ensure that all third-party libraries, including GORM, are up to date.
+
+Direct code link: /Users/dmitry/projects/ctf-training/schizichs/src/controllers/labContoller.go
+Path: src/controllers/labContoller.go
+Vulnerability: Security Misconfiguration
+Relevant code:
+"math"
+
+
+
+	"gorm.io/gorm"
+Description: The code is importing libraries that may not be necessary, which could lead to unnecessary attack vectors.
+Severity: Low
+Fix: Only import necessary libraries and ensure they are properly configured.
+
+FILE END
+

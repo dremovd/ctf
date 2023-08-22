@@ -1,0 +1,558 @@
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/requirements.txt
+Path: requirements.txt
+Vulnerability: Using Components with Known Vulnerabilities
+Relevant code:
+pycryptodome==3.10.4
+Description: The project is using an outdated version of the pycryptodome library, which may contain known vulnerabilities that can be exploited.
+Severity: High
+Fix: Update the pycryptodome library to the latest version.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/requirements.txt
+Path: requirements.txt
+Vulnerability: Using Components with Known Vulnerabilities
+Relevant code:
+flask==2.3.2
+Description: The project is using an outdated version of the Flask library, which may contain known vulnerabilities that can be exploited.
+Severity: High
+Fix: Update the Flask library to the latest version.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/requirements.txt
+Path: requirements.txt
+Vulnerability: Using Components with Known Vulnerabilities
+Relevant code:
+waitress==2.1.2
+Description: The project is using an outdated version of the waitress library, which may contain known vulnerabilities that can be exploited.
+Severity: High
+Fix: Update the waitress library to the latest version.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/Dockerfile
+Path: Dockerfile
+Vulnerability: Security Misconfiguration
+Relevant code:
+COPY . .
+Description: Copying all files into the Docker image could potentially include sensitive files or files not necessary for the application to run, which could lead to security risks.
+Severity: High
+Fix: Specify the necessary files and directories to be copied into the Docker image instead of copying all files.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/Dockerfile
+Path: Dockerfile
+Vulnerability: Using Components with Known Vulnerabilities
+Relevant code:
+FROM python:3.10-slim-buster
+Description: The Docker image used may have known vulnerabilities. It's important to always use the latest secure version of the image.
+Severity: Medium
+Fix: Regularly update the Docker image to the latest secure version.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/Dockerfile
+Path: Dockerfile
+Vulnerability: Injection Attacks
+Relevant code:
+CMD ["python", "main.py"]
+Description: If the main.py script is vulnerable to injection attacks, it could lead to unauthorized data access.
+Severity: High
+Fix: Ensure that the main.py script properly sanitizes all inputs to prevent injection attacks.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/docker-compose.yml
+Path: docker-compose.yml
+Vulnerability: Insecure Data Storage
+Relevant code:
+./users.db:/app/users.db
+Description: The database file 'users.db' is being stored in a volume that may not be secure. This could lead to unauthorized access to the data stored in the database.
+Severity: High
+Fix: Store the database file in a secure location and ensure that it is encrypted. Also, implement proper access controls to prevent unauthorized access.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/docker-compose.yml
+Path: docker-compose.yml
+Vulnerability: Security Misconfiguration
+Relevant code:
+"5001:5001"
+Description: The application is exposed on port 5001. This could potentially allow unauthorized access to the application if proper security measures are not in place.
+Severity: Medium
+Fix: Ensure that proper security measures are in place to prevent unauthorized access to the application. This could include implementing a firewall, using secure protocols, etc.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/docker-compose.yml
+Path: docker-compose.yml
+Vulnerability: Uncontrolled Resource Consumption
+Relevant code:
+cpus: 2.0
+
+    mem_limit: 800M 
+
+    pids_limit: 256
+Description: The application has a limit on the number of processes it can run and the amount of memory it can use. If these limits are reached, it could lead to a denial of service.
+Severity: Low
+Fix: Implement proper resource management to prevent the application from reaching these limits. This could include implementing rate limiting, optimizing resource-intensive operations, etc.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/main.py
+Path: main.py
+Vulnerability: Hardcoded Secrets
+Relevant code:
+app.secret_key = 'kek'
+Description: The application's secret key is hardcoded into the source code. This is a security risk as anyone with access to the source code can obtain the secret key.
+Severity: High
+Fix: Use environment variables to store the secret key. Replace the hardcoded secret key with: app.secret_key = os.environ.get('SECRET_KEY')
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/main.py
+Path: main.py
+Vulnerability: Password Management Weaknesses
+Relevant code:
+password = request.form['password']
+Description: Passwords are being handled in plain text. This is a security risk as anyone with access to the server or database can read the passwords.
+Severity: High
+Fix: Hash and salt passwords before storing them. Replace the plain text password handling with: password = generate_password_hash(request.form['password'])
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/main.py
+Path: main.py
+Vulnerability: Insecure Deserialization
+Relevant code:
+token_server = Tokens(bytes.fromhex(request.form['iv']))
+Description: The application is deserializing data from an untrusted source without validating it. This can lead to a variety of attacks, including code execution.
+Severity: High
+Fix: Validate and sanitize input before deserializing it. Replace the insecure deserialization with: iv = sanitize_input(request.form['iv']); token_server = Tokens(bytes.fromhex(iv)) if iv else Tokens()
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/main.py
+Path: main.py
+Vulnerability: Broken Authentication
+Relevant code:
+assert token_server.validate_token(request.cookies['token'])
+Description: The application is using assertions for authentication checks. Assertions can be disabled in some Python environments, bypassing the authentication check.
+Severity: High
+Fix: Replace assertions with proper error handling. Replace the assertion with: if not token_server.validate_token(request.cookies['token']): abort(401, 'Invalid token')
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/database/database.py
+Path: database/database.py
+Vulnerability: Broken Authentication
+Relevant code:
+cur.execute("SELECT password FROM users WHERE username=(?)", [username])
+
+        data = cur.fetchone()
+
+        cur.close()
+
+        if data is None:
+
+            return False
+
+
+
+        return password == data[0]
+Description: The application is using plain text comparison for passwords which can lead to broken authentication.
+Severity: High
+Fix: Use a secure password hashing function like bcrypt, scrypt or Argon2. Never compare passwords in plain text.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/database/database.py
+Path: database/database.py
+Vulnerability: Insecure Data Storage
+Relevant code:
+self.connection = sqlite3.connect('users.db', check_same_thread=False)
+Description: The application is storing sensitive user information in a SQLite database without any encryption.
+Severity: High
+Fix: Encrypt sensitive data in the database using a strong encryption algorithm. Also, consider using a more secure database system.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/database/database.py
+Path: database/database.py
+Vulnerability: Injection Attacks
+Relevant code:
+cur.execute(
+
+            """
+
+                INSERT INTO users(username, password, flag) VALUES(?,?,?);
+
+            """, [username, password, flag])
+Description: The application is vulnerable to SQL injection attacks as it directly uses user input in SQL queries.
+Severity: High
+Fix: Use parameterized queries or prepared statements to prevent SQL injection attacks.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/database/database.py
+Path: database/database.py
+Vulnerability: Sensitive Data Exposure
+Relevant code:
+"SELECT flag FROM users WHERE username=(?)", [username]
+Description: The application is exposing sensitive user information without any protection.
+Severity: High
+Fix: Encrypt sensitive data and ensure it is only accessible to authorized users.
+
+FILE END
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/templates/home.html
+Path: templates/home.html
+Vulnerability: Sensitive Data Exposure
+Relevant code:
+Your flag is {{flag}}, admin will check it soon and give you some points if its correct:D.
+Description: The flag, which could be sensitive information, is being exposed in the HTML content. This could lead to unauthorized access to sensitive data.
+Severity: High
+Fix: Remove the direct exposure of the flag in the HTML content. Instead, use secure methods to handle sensitive data, such as secure cookies or server-side sessions.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/templates/home.html
+Path: templates/home.html
+Vulnerability: Hardcoded Secrets
+Relevant code:
+<link rel="stylesheet" href="static/style.css">
+Description: The path to the stylesheet is hardcoded into the HTML. If the path or file were to change, the site would break. Additionally, this could potentially expose sensitive information if the directory structure were to be leaked.
+Severity: Low
+Fix: Use a dynamic method to link to the stylesheet, such as a server-side variable or a configuration file.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/templates/home.html
+Path: templates/home.html
+Vulnerability: Misconfigured CORS
+Relevant code:
+<html lang="en">
+Description: The HTML does not include any Cross-Origin Resource Sharing (CORS) headers. This could potentially allow unauthorized websites to make requests to this site.
+Severity: Medium
+Fix: Add CORS headers to the HTML to restrict which sites can make requests. This can be done in the server configuration or in the HTML itself.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/templates/register.html
+Path: templates/register.html
+Vulnerability: Sensitive Data Exposure
+Relevant code:
+<input name="password" type="password" required>
+Description: The password field in the form is not properly protected. It is vulnerable to attacks that can expose sensitive user information.
+Severity: High
+Fix: Implement strong encryption for the password field to protect user data. Use hashing algorithms like bcrypt or scrypt for storing passwords.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/templates/register.html
+Path: templates/register.html
+Vulnerability: Broken Authentication
+Relevant code:
+<form action="/register" method="post">
+Description: The registration form does not implement any kind of captcha or bot protection mechanism. This can lead to automated registration attacks.
+Severity: Medium
+Fix: Implement a captcha or similar bot protection mechanism in the registration form to prevent automated attacks.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/templates/register.html
+Path: templates/register.html
+Vulnerability: Weak Cryptography
+Relevant code:
+<input name="iv" type="iv">
+Description: The initialization vector (IV) for encryption is being taken from user input. This can lead to weak encryption if the user provides a weak IV.
+Severity: High
+Fix: Generate a strong and random initialization vector (IV) on the server-side instead of taking it from user input.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/templates/register.html
+Path: templates/register.html
+Vulnerability: Information Leakage
+Relevant code:
+<a href="/register">{{error}}</a>
+Description: Error messages are being displayed to the user. This can lead to information leakage and expose sensitive system information.
+Severity: Medium
+Fix: Implement proper error handling and avoid displaying raw error messages to the user. Use custom error pages instead.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/templates/login.html
+Path: templates/login.html
+Vulnerability: Sensitive Data Exposure
+Relevant code:
+<input name="password" type="password" required>
+Description: The password input field in the login form does not implement any client-side encryption. This could potentially expose sensitive user data if the connection is not secure.
+Severity: High
+Fix: Implement client-side encryption for the password field. This can be done using JavaScript to hash the password before it is sent to the server.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/templates/login.html
+Path: templates/login.html
+Vulnerability: Cross-Site Request Forgery (CSRF)
+Relevant code:
+<form action="/login" method="post">
+Description: The login form does not implement any anti-CSRF tokens. This could potentially allow an attacker to forge a request on behalf of a user.
+Severity: High
+Fix: Implement anti-CSRF tokens in the form. This can be done by generating a unique token for each session and including it as a hidden field in the form. The server should then verify this token on each POST request.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/templates/login.html
+Path: templates/login.html
+Vulnerability: Weak Cryptography
+Relevant code:
+<input name="iv" type="iv">
+Description: The form allows users to provide their own initialization vector (IV) for encryption. This could potentially allow an attacker to use a weak IV and compromise the encryption.
+Severity: Medium
+Fix: Do not allow users to provide their own IV. Instead, generate a secure random IV on the server side for each session.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/templates/login.html
+Path: templates/login.html
+Vulnerability: Broken Access Control
+Relevant code:
+<a href="/register">Signup</a>
+Description: The application allows anyone to access the registration page. This could potentially allow an attacker to create multiple accounts and perform a brute force attack.
+Severity: Medium
+Fix: Implement some form of rate limiting or CAPTCHA on the registration page to prevent automated attacks.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/tokens/hmac_token.py
+Path: tokens/hmac_token.py
+Vulnerability: Weak Cryptography
+Relevant code:
+self.cipher = AES.new(pad(key)[:16], AES.MODE_ECB)
+Description: The code is using ECB mode for AES encryption which is known to be weak as it does not provide serious message confidentiality.
+Severity: High
+Fix: Replace AES.MODE_ECB with a more secure mode such as AES.MODE_CBC or AES.MODE_CFB. Also, consider using a secure method of generating Initialization Vector (IV) for these modes.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/tokens/hmac_token.py
+Path: tokens/hmac_token.py
+Vulnerability: Insecure Padding
+Relevant code:
+return data + b'\x00' * (16 - len(data) % 16)
+Description: The padding method used in the code is insecure. It uses null bytes for padding which can be easily exploited.
+Severity: Medium
+Fix: Use a secure padding method such as PKCS7.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/tokens/hmac_token.py
+Path: tokens/hmac_token.py
+Vulnerability: Sensitive Data Exposure
+Relevant code:
+token = f"{b64encode(b'HMAC128').decode()}.{b64encode(data).decode()}.{b64encode(hashed).decode()}"
+Description: The token generation method exposes sensitive data. The data is being encoded but not encrypted, making it vulnerable to attacks.
+Severity: High
+Fix: Encrypt the data before encoding it. Also, consider using a secure method for generating the token.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/tokens/hmac_token.py
+Path: tokens/hmac_token.py
+Vulnerability: Insecure Direct Object References (IDOR)
+Relevant code:
+return self.__precompute(data) == signed
+Description: The token validation method is insecure. It directly compares the precomputed data with the signed data, which can be exploited.
+Severity: High
+Fix: Use a secure method for token validation. Consider using a time-based one-time password (TOTP) or a HMAC-based one-time password (HOTP).
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/tokens/token_abstract.py
+Path: tokens/token_abstract.py
+Vulnerability: Insecure Data Storage
+Relevant code:
+class Token(ABC):
+
+    def __init__(self, key: bytes) -> None:
+
+        pass
+
+
+
+    def generate_token(self, data: bytes) -> str:
+
+        pass
+
+
+
+    def validate_token(self, token: str) -> bool:
+
+        pass
+
+Description: The Token class does not implement any form of encryption or secure storage for the key and token data. This could potentially lead to unauthorized access to sensitive data.
+Severity: High
+Fix: Implement secure storage and encryption methods for the key and token data. This could include using a secure hashing algorithm for the key and encrypting the token data.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/tokens/token_abstract.py
+Path: tokens/token_abstract.py
+Vulnerability: Weak Cryptography
+Relevant code:
+def generate_token(self, data: bytes) -> str:
+
+        pass
+Description: The generate_token method does not implement any form of encryption or secure hashing. This could potentially lead to unauthorized access to sensitive data.
+Severity: High
+Fix: Implement a secure hashing algorithm in the generate_token method to ensure that the token data is securely encrypted.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/tokens/token_abstract.py
+Path: tokens/token_abstract.py
+Vulnerability: Broken Authentication
+Relevant code:
+def validate_token(self, token: str) -> bool:
+
+        pass
+Description: The validate_token method does not implement any form of authentication or validation. This could potentially lead to unauthorized access to sensitive data.
+Severity: High
+Fix: Implement a secure validation method in the validate_token method to ensure that only authorized users can access the token data.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/tokens/tokens.py
+Path: tokens/tokens.py
+Vulnerability: Hardcoded Secrets
+Relevant code:
+self.token_managers = {
+
+            "EC256": EcdsaToken(b'REDACTED'),
+
+            "ARC228": RC4Token(b'REDACTED', iv = iv)
+
+        }
+Description: The encryption keys for the tokens are hardcoded into the source code. This is a security risk as anyone with access to the source code can see these keys.
+Severity: High
+Fix: Replace hardcoded keys with secure key management system. The keys should be stored in a secure and encrypted format, and should be accessible only to authorized entities.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/tokens/tokens.py
+Path: tokens/tokens.py
+Vulnerability: Insecure Deserialization
+Relevant code:
+def get_data(self, message: str) -> dict:
+
+        try:
+
+            token_type, data, signed = list(
+
+                        map(b64decode, message.split('.'))
+
+                    )
+
+        except Exception as e:
+
+            raise Exception('Cannot unpack token')
+
+
+
+        return json.loads(data)
+Description: The function 'get_data' is deserializing data without validating it. This can lead to potential security risks such as remote code execution, injection attacks, etc.
+Severity: High
+Fix: Add validation checks before deserializing data. Use safe deserialization methods that do not allow the execution of arbitrary code.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/tokens/ecdsa_token.py
+Path: tokens/ecdsa_token.py
+Vulnerability: Hardcoded Secrets
+Relevant code:
+self.signer = ECDSA(key)
+Description: The key used for the ECDSA signer appears to be hardcoded. This could potentially expose sensitive information if the source code is leaked.
+Severity: High
+Fix: Instead of hardcoding the key, consider storing it in a secure and encrypted configuration file or use a secure key management system.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/tokens/ecdsa_token.py
+Path: tokens/ecdsa_token.py
+Vulnerability: Sensitive Data Exposure
+Relevant code:
+return f"{r}.{s}".encode()
+Description: The method __precompute returns the signature in an encoded format. If an attacker can decode this, they may be able to forge signatures.
+Severity: Medium
+Fix: Consider using a more secure method of encoding the signature, such as a cryptographic hash function.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/tokens/ecdsa_token.py
+Path: tokens/ecdsa_token.py
+Vulnerability: Insecure Deserialization
+Relevant code:
+token_type, data, signed = list(map(b64decode, token.split('.')))
+Description: The validate_token method decodes the token without validating its integrity first. This could potentially allow an attacker to inject malicious data into the token.
+Severity: High
+Fix: Before deserializing the token, validate its integrity by checking its signature.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/tokens/rc4_token.py
+Path: tokens/rc4_token.py
+Vulnerability: Hardcoded Secrets
+Relevant code:
+def __init__(self, key: bytes, iv: bytes = b'dtlad2023'):
+
+        self.key = iv + key
+Description: The initialization vector (IV) for the RC4 cipher is hardcoded into the source code. This can lead to potential security risks as anyone with access to the source code can see this value.
+Severity: High
+Fix: The initialization vector (IV) should not be hardcoded. Instead, it should be generated dynamically for each session or stored securely in an environment variable.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/tokens/rc4_token.py
+Path: tokens/rc4_token.py
+Vulnerability: Weak Cryptography
+Relevant code:
+cipher = ARC4.new(self.key)
+Description: The RC4 cipher is considered to be weak and has several known vulnerabilities. It is not recommended for use in new systems.
+Severity: High
+Fix: Replace the RC4 cipher with a more secure algorithm such as AES.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/tokens/rc4_token.py
+Path: tokens/rc4_token.py
+Vulnerability: Insecure Data Storage
+Relevant code:
+return cipher.decrypt(data)
+Description: The data is decrypted using a weak cryptographic algorithm (RC4), which can lead to unauthorized access to sensitive information.
+Severity: High
+Fix: Use a more secure cryptographic algorithm for decryption, such as AES.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/tokens/rc4_token.py
+Path: tokens/rc4_token.py
+Vulnerability: Sensitive Data Exposure
+Relevant code:
+token = f"{b64encode(b'ARC228').decode()}.{b64encode(data).decode()}.{b64encode(hashed).decode()}"
+Description: The data is encoded using base64, which is not a secure method of encryption. Base64 encoding can be easily reversed, leading to potential exposure of sensitive data.
+Severity: Medium
+Fix: Use a more secure method of encryption for sensitive data, such as AES encryption.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/tokens/elliptic/rng.py
+Path: tokens/elliptic/rng.py
+Vulnerability: Weak Cryptography
+Relevant code:
+self.state = bytes_to_long(os.urandom(32))
+Description: The random number generator uses os.urandom which is not suitable for cryptographic purposes. It can lead to predictable values and hence can be exploited.
+Severity: High
+Fix: Replace os.urandom with a secure random number generator suitable for cryptographic purposes such as secrets.token_bytes() in Python.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/tokens/elliptic/rng.py
+Path: tokens/elliptic/rng.py
+Vulnerability: Weak Cryptography
+Relevant code:
+self.modulus = 2**128
+Description: The modulus used in the random number generator is not large enough for cryptographic purposes. It can lead to collisions and hence can be exploited.
+Severity: Medium
+Fix: Increase the size of the modulus used in the random number generator to a larger prime number.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/tokens/elliptic/rng.py
+Path: tokens/elliptic/rng.py
+Vulnerability: Hardcoded Secrets
+Relevant code:
+self.a = 228
+Description: The value of 'a' is hardcoded in the source code. This can lead to predictable outputs from the random number generator and hence can be exploited.
+Severity: Medium
+Fix: Do not hardcode secrets in the source code. Instead, use a secure method to generate and store these values.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/tokens/elliptic/rng.py
+Path: tokens/elliptic/rng.py
+Vulnerability: Hardcoded Secrets
+Relevant code:
+self.b = 0x837d1c76e0f32b2b6b22
+Description: The value of 'b' is hardcoded in the source code. This can lead to predictable outputs from the random number generator and hence can be exploited.
+Severity: Medium
+Fix: Do not hardcode secrets in the source code. Instead, use a secure method to generate and store these values.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/tokens/elliptic/elliptic.py
+Path: tokens/elliptic/elliptic.py
+Vulnerability: Hardcoded Secrets
+Relevant code:
+self.d = 1337
+Description: The private key for the ECDSA algorithm is hardcoded into the source code. This is a severe security risk as anyone with access to the source code can retrieve the private key.
+Severity: High
+Fix: The private key should be securely generated and stored, not hardcoded into the source code. Consider using a secure method to generate and store keys, such as a secure key vault or environment variables.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/tokens/elliptic/elliptic.py
+Path: tokens/elliptic/elliptic.py
+Vulnerability: Weak Cryptography
+Relevant code:
+key: bytes = b'huijopa'
+Description: The default key for the ECDSA algorithm is weak and easily guessable. This can lead to unauthorized data access.
+Severity: High
+Fix: Use a secure method to generate keys, such as a cryptographically secure pseudorandom number generator. The key should be long enough to prevent brute force attacks.
+
+Direct code link: /Users/dmitry/projects/ctf-training/jeopardy/tokens/elliptic/elliptic.py
+Path: tokens/elliptic/elliptic.py
+Vulnerability: Weak Cryptography
+Relevant code:
+md5(long_to_bytes(m)).digest()
+Description: MD5 is used for hashing, which is considered insecure due to its vulnerability to collision attacks.
+Severity: Medium
+Fix: Replace MD5 with a more secure hashing algorithm, such as SHA-256.
+
+FILE END
+

@@ -1,0 +1,66 @@
+Direct code link: /Users/dmitry/projects/ctf-training/Zapiski/Dockerfile
+Path: Dockerfile
+Vulnerability: Security Misconfiguration
+Relevant code:
+COPY ./server ./server
+Description: The Dockerfile copies the entire server directory into the Docker image. This could potentially include sensitive files or configuration data.
+Severity: High
+Fix: Only copy the necessary files into the Docker image. Avoid copying sensitive files or configuration data.
+
+Direct code link: /Users/dmitry/projects/ctf-training/Zapiski/Dockerfile
+Path: Dockerfile
+Vulnerability: Using Components with Known Vulnerabilities
+Relevant code:
+FROM ubuntu:latest
+Description: The Dockerfile uses the latest version of Ubuntu. This could potentially include unpatched vulnerabilities.
+Severity: Medium
+Fix: Use a specific version of Ubuntu that has been tested and vetted for security vulnerabilities.
+
+Direct code link: /Users/dmitry/projects/ctf-training/Zapiski/Dockerfile
+Path: Dockerfile
+Vulnerability: Insecure Data Storage
+Relevant code:
+ENTRYPOINT [ "./server" ]
+Description: The Dockerfile sets the server as the entrypoint. If the server has any vulnerabilities, they could be exploited when the Docker container is run.
+Severity: Medium
+Fix: Ensure that the server is secure and does not have any known vulnerabilities before setting it as the entrypoint.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/Zapiski/docker-compose.yml
+Path: docker-compose.yml
+Vulnerability: Path Traversal Attack
+Relevant code:
+volumes:
+
+      - "./users:/service/users"
+Description: The docker-compose.yml file is mapping the local directory './users' to '/service/users' in the container. This could potentially allow an attacker to access files and directories outside the intended directory.
+Severity: High
+Fix: Ensure that only necessary directories are mapped and that they are properly isolated and secured. Consider using Docker's built-in security features such as user namespaces to isolate resources.
+
+Direct code link: /Users/dmitry/projects/ctf-training/Zapiski/docker-compose.yml
+Path: docker-compose.yml
+Vulnerability: Using Components with Known Vulnerabilities
+Relevant code:
+image: c4tbuts4d/dedcleaner:latest
+Description: The docker-compose.yml file is using the 'latest' tag for the 'c4tbuts4d/dedcleaner' image. This could potentially introduce vulnerabilities if the latest version of the image has known security issues.
+Severity: Medium
+Fix: Specify a version for the 'c4tbuts4d/dedcleaner' image that is known to be secure. Regularly update the version as necessary, ensuring that each update does not introduce new vulnerabilities.
+
+Direct code link: /Users/dmitry/projects/ctf-training/Zapiski/docker-compose.yml
+Path: docker-compose.yml
+Vulnerability: Hardcoded Secrets
+Relevant code:
+environment:
+
+      - DELETE_AFTER=20m
+
+      - SLEEP=20m
+
+      - DIRS=/users
+Description: The docker-compose.yml file contains hardcoded environment variables. If these variables contain sensitive information, they could be exposed if the file is leaked.
+Severity: Low
+Fix: Use Docker secrets or environment variables to securely manage sensitive information. Avoid hardcoding sensitive information in the docker-compose.yml file.
+
+FILE END
+

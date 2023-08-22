@@ -1,0 +1,351 @@
+Direct code link: /Users/dmitry/projects/ctf-training/msngr/docker-compose.yml
+Path: docker-compose.yml
+Vulnerability: Security Misconfiguration
+Relevant code:
+version: '2.4'
+
+services: 
+
+  msngr: 
+
+    build: src
+
+    cpus: 1
+
+    mem_limit: 500M
+
+    pids_limit: 256
+
+    restart: unless-stopped
+
+    ports:
+
+      - 8441:8441
+
+    volumes:
+
+      - ./logs:/app/logs
+
+      - ./data:/app/data
+
+Description: The docker-compose.yml file exposes the application's internal service (msngr) on a public port (8441). This could potentially allow unauthorized access to the service.
+Severity: High
+Fix: Change the docker-compose.yml file to only expose necessary services and ports. Consider using a reverse proxy or firewall to limit access to the service.
+
+Direct code link: /Users/dmitry/projects/ctf-training/msngr/docker-compose.yml
+Path: docker-compose.yml
+Vulnerability: Insecure Data Storage
+Relevant code:
+version: '2.4'
+
+services: 
+
+  msngr: 
+
+    build: src
+
+    cpus: 1
+
+    mem_limit: 500M
+
+    pids_limit: 256
+
+    restart: unless-stopped
+
+    ports:
+
+      - 8441:8441
+
+    volumes:
+
+      - ./logs:/app/logs
+
+      - ./data:/app/data
+
+Description: The docker-compose.yml file mounts the logs and data directories from the host system into the container. If these directories contain sensitive information, it could be exposed if the container is compromised.
+Severity: Medium
+Fix: Ensure that sensitive data is not stored in directories that are mounted into containers. Consider using Docker secrets or other secure methods to handle sensitive data.
+Direct code link: /Users/dmitry/projects/ctf-training/msngr/src/db.py
+Path: src/db.py
+Vulnerability: Injection Attacks
+Relevant code:
+cur.execute("SELECT * FROM users WHERE username=(?)", [username])
+Description: Untrusted data sent to an interpreter. In this case, the username is directly used in a SQL query which can lead to SQL injection if the username is not properly sanitized.
+Severity: High
+Fix: Use parameterized queries or prepared statements to prevent SQL injection. For example: cur.execute("SELECT * FROM users WHERE username=?", (username,))
+
+Direct code link: /Users/dmitry/projects/ctf-training/msngr/src/db.py
+Path: src/db.py
+Vulnerability: Sensitive Data Exposure
+Relevant code:
+self.connection = sqlite3.connect('data/users.db', check_same_thread=False)
+Description: Unprotected sensitive information. The SQLite database file 'users.db' is stored in a publicly accessible directory which can lead to data leakage.
+Severity: High
+Fix: Store the database file in a secure location that is not publicly accessible. Use encryption for sensitive data.
+
+Direct code link: /Users/dmitry/projects/ctf-training/msngr/src/db.py
+Path: src/db.py
+Vulnerability: Insecure Data Storage
+Relevant code:
+cur.execute(
+
+                """
+
+                INSERT INTO users(username, secret_key, hello_message, secret_message) VALUES(?,?,?,?);
+
+            """,
+
+                [username, secret_key, hello_message, secret_message],
+
+            )
+Description: Inadequate protection of stored data. The secret_key is stored in plain text in the database which can lead to data leakage if the database is compromised.
+Severity: High
+Fix: Use a secure method to store sensitive data. For example, hash the secret_key before storing it in the database.
+
+Direct code link: /Users/dmitry/projects/ctf-training/msngr/src/db.py
+Path: src/db.py
+Vulnerability: Broken Access Control
+Relevant code:
+def get_user_info(self, username):
+
+        cur = self.connection.cursor()
+
+        cur.execute("SELECT * FROM users WHERE username=(?)", [username])
+
+        data = cur.fetchone()
+
+        cur.close()
+
+        if data is None:
+
+            return []
+
+        _, username, secret_key, hello_message, secret_message = data
+
+        return [username, secret_key, hello_message, secret_message]
+Description: Users able to perform unauthorized actions. The get_user_info function returns sensitive user information including the secret_key without any access control.
+Severity: High
+Fix: Implement proper access control. Only return sensitive information if the user has the necessary permissions.Direct code link: /Users/dmitry/projects/ctf-training/msngr/src/Dockerfile
+Path: src/Dockerfile
+Vulnerability: Using Components with Known Vulnerabilities
+Relevant code:
+FROM python:3.11-alpine
+Description: The project is using an outdated version of Python. This can lead to potential security vulnerabilities if the version in use has known issues that have been fixed in later versions.
+Severity: High
+Fix: Update the Python version to the latest stable release.
+
+Direct code link: /Users/dmitry/projects/ctf-training/msngr/src/Dockerfile
+Path: src/Dockerfile
+Vulnerability: Sensitive Data Exposure
+Relevant code:
+COPY . .
+Description: The Dockerfile copies all files from the current directory into the Docker image. This could potentially include sensitive files such as configuration files with secrets, private keys, etc.
+Severity: High
+Fix: Specify the necessary files and directories to be copied into the Docker image instead of copying everything.
+
+Direct code link: /Users/dmitry/projects/ctf-training/msngr/src/Dockerfile
+Path: src/Dockerfile
+Vulnerability: Security Misconfiguration
+Relevant code:
+CMD [ "./listener.py" ]
+Description: The Dockerfile runs a script as its command. If this script has vulnerabilities, it could lead to security issues.
+Severity: Medium
+Fix: Ensure that the script being run is secure and does not contain any vulnerabilities.Direct code link: /Users/dmitry/projects/ctf-training/msngr/src/msngr.py
+Path: src/msngr.py
+Vulnerability: Sensitive Data Exposure
+Relevant code:
+self.secret_key = user_data[1]
+Description: The secret key is stored in plain text in the user's session. This can lead to unauthorized access if the session data is compromised.
+Severity: High
+Fix: Use secure methods to store sensitive data, such as hashing or encryption. For example, you can use bcrypt or other secure hashing algorithms to store the secret key.
+
+Direct code link: /Users/dmitry/projects/ctf-training/msngr/src/msngr.py
+Path: src/msngr.py
+Vulnerability: Broken Authentication
+Relevant code:
+if token != user_data[1]:
+Description: The authentication token is compared in plain text, which can lead to potential security risks if the token is intercepted.
+Severity: High
+Fix: Use secure methods to compare sensitive data, such as secure hash comparison. For example, you can use hmac.compare_digest() in Python.
+
+Direct code link: /Users/dmitry/projects/ctf-training/msngr/src/msngr.py
+Path: src/msngr.py
+Vulnerability: Injection Attacks
+Relevant code:
+self.database.get_user_info(login)
+Description: The login data is directly used in a database query without sanitization, which can lead to SQL injection attacks.
+Severity: High
+Fix: Use parameterized queries or prepared statements to prevent SQL injection. For example, you can use ? placeholders in SQLite or %s placeholders in MySQL and pass the parameters separately.
+
+Direct code link: /Users/dmitry/projects/ctf-training/msngr/src/msngr.py
+Path: src/msngr.py
+Vulnerability: Insecure Data Storage
+Relevant code:
+self.database.add_user(login, token, hello_message, secret_message)
+Description: The user's data is stored in the database without proper encryption or hashing. This can lead to unauthorized access if the database is compromised.
+Severity: High
+Fix: Use secure methods to store sensitive data, such as hashing or encryption. For example, you can use bcrypt or other secure hashing algorithms to store the password and AES for other sensitive data.
+
+Direct code link: /Users/dmitry/projects/ctf-training/msngr/src/msngr.py
+Path: src/msngr.py
+Vulnerability: Weak Cryptography
+Relevant code:
+self.key_exchange = KeyExchanger(int(generator, 16), int(modulus, 16))
+Description: The key exchange mechanism uses weak cryptography methods, which can be easily broken by modern computers.
+Severity: High
+Fix: Use secure cryptographic methods for key exchange, such as Diffie-Hellman or RSA. Also, make sure to use a large enough key size (at least 2048 bits for RSA).
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/msngr/src/utils.py
+Path: src/utils.py
+Vulnerability: Weak Cryptography
+Relevant code:
+return bytes([choice(list(range(256))) for _ in range(size)])
+Description: The function 'random_bytes' uses a weak method for generating random bytes. It uses the 'random' module, which is not suitable for cryptographic purposes.
+Severity: High
+Fix: Replace the 'random' module with a secure random number generator. For example, in Python, you can use the 'secrets' module, which provides access to the most secure source of randomness that your system provides. The fixed code would look like this: 'import secrets' and 'return secrets.token_bytes(size)'.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/msngr/src/listener.py
+Path: src/listener.py
+Vulnerability: Hardcoded Secrets
+Relevant code:
+self.before_input = "welcom to mesfnasensgetR! on SANbKA!!\n"
+Description: The welcome message appears to contain a hardcoded secret or key. Hardcoding secrets in code can lead to exposure of sensitive data if the source code is leaked or otherwise exposed.
+Severity: High
+Fix: Remove hardcoded secrets from the source code. Use secure methods to store and retrieve secrets, such as environment variables or secure key vaults.
+
+Direct code link: /Users/dmitry/projects/ctf-training/msngr/src/listener.py
+Path: src/listener.py
+Vulnerability: Broken Authentication
+Relevant code:
+'login': [self.msngr.login, ['login', 'token']]
+Description: The login function appears to use a token for authentication. If this token is not securely generated and stored, it could lead to broken authentication.
+Severity: High
+Fix: Ensure that tokens are securely generated and stored. Use secure methods for token generation and storage, such as JWTs with secure signing algorithms, and store tokens securely using methods such as HTTP-only cookies.
+
+Direct code link: /Users/dmitry/projects/ctf-training/msngr/src/listener.py
+Path: src/listener.py
+Vulnerability: Sensitive Data Exposure
+Relevant code:
+'register': [self.msngr.register, ['login', 'hello_message', 'secret_message']]
+Description: The register function appears to handle sensitive data, including a secret message. If this data is not properly protected, it could lead to sensitive data exposure.
+Severity: High
+Fix: Ensure that sensitive data is properly protected. Use secure methods for handling sensitive data, such as encryption for data at rest and in transit, and do not expose sensitive data in logs or error messages.
+
+Direct code link: /Users/dmitry/projects/ctf-training/msngr/src/listener.py
+Path: src/listener.py
+Vulnerability: Weak Cryptography
+Relevant code:
+'communicate_ask_to_encrypt': [self.msngr.communicate_ask_to_encrypt, ['data', 'friend']]
+Description: The communicate_ask_to_encrypt function appears to handle encryption. If weak or outdated cryptographic algorithms are used, it could lead to weak cryptography.
+Severity: High
+Fix: Ensure that strong and up-to-date cryptographic algorithms are used for encryption. Use secure encryption algorithms such as AES with a strong key, and regularly update cryptographic algorithms as new vulnerabilities are discovered.
+
+Direct code link: /Users/dmitry/projects/ctf-training/msngr/src/listener.py
+Path: src/listener.py
+Vulnerability: Insecure Deserialization
+Relevant code:
+'decrypt': [self.msngr.decrypt, ['ciphertext', 'key']]
+Description: The decrypt function appears to handle deserialization of ciphertext. If untrusted data is deserialized without proper validation, it could lead to insecure deserialization.
+Severity: High
+Fix: Ensure that deserialized data is properly validated. Use secure methods for deserialization, such as signed data or encrypted data, and validate all deserialized data before use.
+
+Direct code link: /Users/dmitry/projects/ctf-training/msngr/src/listener.py
+Path: src/listener.py
+Vulnerability: Insufficient Logging and Monitoring
+Relevant code:
+'logs/msngr.log'
+Description: The application logs information to a file, but it's unclear if sensitive information is being logged or if there's adequate monitoring of the logs for suspicious activity.
+Severity: Medium
+Fix: Ensure that sensitive information is not being logged and that there's adequate monitoring of the logs for suspicious activity. Implement alerting mechanisms to notify of potential security incidents.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/msngr/src/protocols/cipher.py
+Path: src/protocols/cipher.py
+Vulnerability: Hardcoded Secrets
+Relevant code:
+def __init__(self,key):
+
+        self.__init_round_keys(pad(key, 64))
+Description: The encryption key is hardcoded into the source code. This is a security risk as anyone with access to the source code can retrieve the encryption key.
+Severity: High
+Fix: Store encryption keys in a secure and encrypted key vault. Retrieve the keys from the vault when needed.
+
+Direct code link: /Users/dmitry/projects/ctf-training/msngr/src/protocols/cipher.py
+Path: src/protocols/cipher.py
+Vulnerability: Weak Cryptography
+Relevant code:
+def __init_round_keys(self,key):
+
+        keys = [key[i:i+8] for i in range(0, 64, 8)]
+
+        self.round_keys = keys.copy()
+
+        for key in keys:
+
+             self.round_keys.append(key[::-1])
+Description: The encryption algorithm uses a weak method for generating round keys. This can lead to vulnerabilities in the encryption process.
+Severity: Medium
+Fix: Use a more secure method for generating round keys, such as a secure pseudorandom number generator.
+
+Direct code link: /Users/dmitry/projects/ctf-training/msngr/src/protocols/cipher.py
+Path: src/protocols/cipher.py
+Vulnerability: Insecure Data Storage
+Relevant code:
+def pad(msg, length):
+
+    return msg + bytes([0] * (length - (len(msg) % length)))
+Description: The padding method used in the encryption process is insecure. Padding with zeros can lead to vulnerabilities in the encryption process.
+Severity: Low
+Fix: Use a more secure padding method, such as PKCS7 or OAEP.
+
+Direct code link: /Users/dmitry/projects/ctf-training/msngr/src/protocols/cipher.py
+Path: src/protocols/cipher.py
+Vulnerability: Insecure Data Storage
+Relevant code:
+def unpad(msg):
+
+    while len(msg) > 0 and msg[-1] == 0:
+
+         msg = msg[:-1]
+
+    return msg
+Description: The unpadding method used in the decryption process is insecure. Unpadding with zeros can lead to vulnerabilities in the decryption process.
+Severity: Low
+Fix: Use a more secure unpadding method, such as PKCS7 or OAEP.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/msngr/src/protocols/key_exchange.py
+Path: src/protocols/key_exchange.py
+Vulnerability: Hardcoded Secrets
+Relevant code:
+self.modulus = p
+Description: The modulus value is hardcoded in the code. This can lead to security issues as the same modulus is used every time, making it easier for an attacker to crack the encryption.
+Severity: High
+Fix: The modulus should be generated dynamically and not be hardcoded. Use a secure method to generate a random prime number for the modulus.
+
+Direct code link: /Users/dmitry/projects/ctf-training/msngr/src/protocols/key_exchange.py
+Path: src/protocols/key_exchange.py
+Vulnerability: Weak Cryptography
+Relevant code:
+return hex(pow(alice_public_key, bob_private_key, self.modulus))[2:]
+Description: The method used for generating the shared key is weak. It uses a simple power function which can be easily cracked by an attacker.
+Severity: High
+Fix: Use a secure cryptographic algorithm to generate the shared key. Consider using a library like PyCrypto or cryptography.io for this purpose.
+
+Direct code link: /Users/dmitry/projects/ctf-training/msngr/src/protocols/key_exchange.py
+Path: src/protocols/key_exchange.py
+Vulnerability: Insecure Data Storage
+Relevant code:
+return sha512(str(shared_key).encode()).hexdigest()
+Description: The shared key is being hashed using SHA-512 and then stored. While SHA-512 is a strong hashing algorithm, it is not suitable for storing passwords or keys as it is vulnerable to rainbow table attacks.
+Severity: Medium
+Fix: Use a secure method for storing the shared key. Consider using a key derivation function like PBKDF2, bcrypt or scrypt.
+
+FILE END
+
