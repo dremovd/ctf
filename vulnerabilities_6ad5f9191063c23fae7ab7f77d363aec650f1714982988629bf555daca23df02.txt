@@ -126,4 +126,2024 @@ Relevant code:
 COPY --from=builder --chown=node:node /app/build build/
 Description: The application files are owned by the node user. This can lead to unauthorized access or modification of the application files if the node user is compromised.
 Severity: Medium
-Fix: Set appropriate file permissions and ownership. Do not allow non-root users to own or write to application files.
+Fix: Set appropriate file permissions and ownership. Do not allow non-root users to own or write to application files.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/.eslintrc.cjs
+Path: web/.eslintrc.cjs
+Vulnerability: Security Misconfiguration
+Code line: None
+Relevant code:
+module.exports = {
+
+  root: true,
+
+  extends: ['eslint:recommended', 'plugin:svelte/recommended', 'prettier'],
+
+  parserOptions: {
+
+    sourceType: 'module',
+
+    ecmaVersion: 2020,
+
+    extraFileExtensions: ['.svelte']
+
+  },
+
+  env: {
+
+    browser: true,
+
+    es2017: true,
+
+    node: true
+
+  }
+
+};
+
+Description: The project is configured to use eslint, svelte and prettier. However, there is no explicit configuration for security-related rules in eslint. This could lead to potential security vulnerabilities in the code.
+Severity: Medium
+Fix: Add security-related eslint plugins and rules to the configuration. For example, you can use 'eslint-plugin-security' which contains several security-related rules.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/.npmrc
+Path: web/.npmrc
+Vulnerability: Security Misconfiguration
+Code line: None
+Relevant code:
+engine-strict=true
+
+resolution-mode=highest
+
+Description: The .npmrc file is configured to use the highest available version of a package. This could lead to the use of unstable or insecure versions.
+Severity: Medium
+Fix: Change 'resolution-mode=highest' to 'resolution-mode=lockfile' to ensure that only package versions specified in the lockfile are used.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/.prettierignore
+Path: web/.prettierignore
+Vulnerability: Sensitive Data Exposure
+Code line: None
+Relevant code:
+.env
+
+.env.*
+
+!.env.example
+Description: The .env files are exposed in the .prettierignore file. These files usually contain sensitive information such as API keys, database credentials, etc. Exposing these files can lead to unauthorized access to these sensitive data.
+Severity: High
+Fix: Remove .env, .env.* and !.env.example from the .prettierignore file. Make sure these files are not exposed in any way and are added to .gitignore file.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/package.json
+Path: web/package.json
+Vulnerability: Using Components with Known Vulnerabilities
+Code line: None
+Relevant code:
+"pocketbase": "^0.15.2"
+Description: The project is using an outdated version of the 'pocketbase' library. This can expose the application to vulnerabilities that have been fixed in more recent versions.
+Severity: High
+Fix: Update the 'pocketbase' library to the latest stable version.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/.env
+Path: web/.env
+Vulnerability: Hardcoded Secrets
+Code line: None
+Relevant code:
+LOCAL_POCKETBASE_ADDRESS = "http://pocketbase:8090"
+
+WORKSPACE_DATA_DIR = "/data"
+
+Description: The source code contains hardcoded secrets. This is a security risk as it exposes sensitive information that could be used to gain unauthorized access to systems.
+Severity: High
+Fix: Remove hardcoded secrets from the source code. Use environment variables or secure vaults to store sensitive information.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/.eslintignore
+Path: web/.eslintignore
+Vulnerability: Sensitive Data Exposure
+Code line: None
+Relevant code:
+.env
+
+.env.*
+
+!.env.example
+Description: The .env files are exposed in the .eslintignore file. These files usually contain sensitive information such as API keys, database credentials, etc.
+Severity: High
+Fix: Remove .env, .env.* and !.env.example from the .eslintignore file. Instead, ensure these files are included in the .gitignore file to prevent them from being committed to the repository.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/.eslintignore
+Path: web/.eslintignore
+Vulnerability: Security Misconfiguration
+Code line: None
+Relevant code:
+node_modules
+
+/build
+
+/.svelte-kit
+
+/package
+Description: The node_modules, build, .svelte-kit and package directories are exposed in the .eslintignore file. These directories may contain sensitive information or dependencies with known vulnerabilities.
+Severity: Medium
+Fix: Remove node_modules, /build, /.svelte-kit and /package from the .eslintignore file. Instead, ensure these directories are included in the .gitignore file to prevent them from being committed to the repository.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/.eslintignore
+Path: web/.eslintignore
+Vulnerability: Information Leakage
+Code line: None
+Relevant code:
+.DS_Store
+Description: .DS_Store files are exposed in the .eslintignore file. These files are created by macOS and may contain metadata about the contents of the directory.
+Severity: Low
+Fix: Remove .DS_Store from the .eslintignore file. Instead, ensure this file is included in the .gitignore file to prevent it from being committed to the repository.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/entrypoint.sh
+Path: web/entrypoint.sh
+Vulnerability: Insecure Data Storage
+Code line: None
+Relevant code:
+chmod -R 777 /data
+Description: The script is setting insecure permissions (777) on the /data directory, which means any user can read, write, and execute any file in this directory. This can lead to unauthorized data access or manipulation.
+Severity: High
+Fix: Change the permissions to a more secure setting, such as 755 for directories and 644 for files. This would allow only the owner to write to these files, while still allowing other users to read them. The code would look like this: 'chmod -R 755 /data' for directories and 'chmod 644 filename' for files.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/app.d.ts
+Path: web/src/app.d.ts
+Vulnerability: Hardcoded Secrets
+Code line: None
+Relevant code:
+pocketbase: import('pocketbase').default;
+
+      user: import('pocketbase').default['authStore']['model'];
+Description: The source code contains hardcoded secrets. This can lead to unauthorized access if the source code is leaked.
+Severity: High
+Fix: Remove hardcoded secrets from the source code. Use environment variables or secure vaults to store sensitive information.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/app.d.ts
+Path: web/src/app.d.ts
+Vulnerability: Insecure Data Storage
+Code line: None
+Relevant code:
+pocketbase: import('pocketbase').default;
+
+      user: import('pocketbase').default['authStore']['model'];
+Description: The source code seems to be storing sensitive data insecurely. This can lead to unauthorized access and data breaches.
+Severity: High
+Fix: Ensure that sensitive data is stored securely. Use encryption and secure storage solutions.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/app.d.ts
+Path: web/src/app.d.ts
+Vulnerability: API Security Misconfiguration
+Code line: None
+Relevant code:
+pocketbase: import('pocketbase').default;
+
+      user: import('pocketbase').default['authStore']['model'];
+Description: The source code seems to be using APIs insecurely. This can lead to unauthorized access and data breaches.
+Severity: High
+Fix: Ensure that APIs are used securely. Use proper authentication and input validation.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/hooks.client.js
+Path: web/src/hooks.client.js
+Vulnerability: Sensitive Data Exposure
+Code line: None
+Relevant code:
+document.cookie = pocketbase.authStore.exportToCookie({ httpOnly: false });
+Description: The application is storing sensitive information in cookies without the HttpOnly flag. This can expose the data to cross-site scripting (XSS) attacks.
+Severity: High
+Fix: Change the code to: document.cookie = pocketbase.authStore.exportToCookie({ httpOnly: true });
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/hooks.client.js
+Path: web/src/hooks.client.js
+Vulnerability: Broken Authentication
+Code line: None
+Relevant code:
+pocketbase.authStore.loadFromCookie(document.cookie);
+Description: The application is loading authentication data from a cookie. This can expose the application to session hijacking or session sidejacking attacks if the cookie is intercepted.
+Severity: High
+Fix: Implement secure session management using secure, HTTP-only cookies and regenerate session after login. Consider using a server-side session management that is not easily tampered.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/hooks.client.js
+Path: web/src/hooks.client.js
+Vulnerability: Broken Access Control
+Code line: None
+Relevant code:
+pocketbase.authStore.onChange(() => {
+
+  currentUser.set(pocketbase.authStore.model);
+
+  document.cookie = pocketbase.authStore.exportToCookie({ httpOnly: false });
+
+});
+Description: The application is changing user data based on changes in the authStore model. If an attacker can manipulate the authStore model, they can potentially change user data.
+Severity: High
+Fix: Implement proper access controls to ensure that only authorized users can change user data. Consider using server-side access control checks.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/hooks.server.js
+Path: web/src/hooks.server.js
+Vulnerability: Sensitive Data Exposure
+Code line: None
+Relevant code:
+response.headers.set('set-cookie', pocketbase.authStore.exportToCookie({ httpOnly: false }));
+Description: The application is setting cookies without the HttpOnly flag, which means that the cookie can be accessed by client-side scripts. This can lead to sensitive data exposure if the cookie contains confidential information.
+Severity: High
+Fix: Change the code to set the HttpOnly flag to true when setting cookies: response.headers.set('set-cookie', pocketbase.authStore.exportToCookie({ httpOnly: true }));
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/hooks.server.js
+Path: web/src/hooks.server.js
+Vulnerability: Broken Authentication
+Code line: None
+Relevant code:
+pocketbase.authStore.loadFromCookie(event.request.headers.get('cookie') || '');
+Description: The application is loading authentication data from cookies without any validation. This can lead to broken authentication if the cookie is manipulated or spoofed.
+Severity: High
+Fix: Add validation checks when loading authentication data from cookies.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/hooks.server.js
+Path: web/src/hooks.server.js
+Vulnerability: Insecure Data Storage
+Code line: None
+Relevant code:
+event.locals.pocketbase = pocketbase;
+
+  event.locals.user = user;
+Description: The application is storing sensitive data in local variables without any encryption or protection. This can lead to insecure data storage if the data is accessed by unauthorized users or processes.
+Severity: Medium
+Fix: Encrypt or protect sensitive data when storing it in local variables.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/app.html
+Path: web/src/app.html
+Vulnerability: Cross-Site Scripting (XSS)
+Code line: None
+Relevant code:
+<div style="display: contents">%sveltekit.body%</div>
+Description: Untrusted data inserted into HTML. The application might be vulnerable to Cross-Site Scripting (XSS) attacks where malicious scripts are injected into otherwise benign and trusted websites.
+Severity: High
+Fix: Sanitize user input and use context-aware output encoding libraries to prevent XSS attacks.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/app.html
+Path: web/src/app.html
+Vulnerability: Sensitive Data Exposure
+Code line: None
+Relevant code:
+<body data-sveltekit-preload-data="hover">
+Description: Unprotected sensitive information. The application might be exposing sensitive data through HTML attributes.
+Severity: Medium
+Fix: Avoid storing sensitive data in HTML attributes. Use secure methods to transfer and store sensitive information.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/app.html
+Path: web/src/app.html
+Vulnerability: Clickjacking
+Code line: None
+Relevant code:
+<meta name="viewport" content="width=device-width" />
+Description: Embedding UI into malicious sites. The application might be vulnerable to Clickjacking attacks where the attacker tricks a user into clicking on an invisible or disguised element within a webpage.
+Severity: Medium
+Fix: Use X-Frame-Options HTTP response header or Content Security Policy with the frame-ancestors directive to prevent Clickjacking.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/pocketbase.js
+Path: web/src/lib/pocketbase.js
+Vulnerability: Hardcoded Secrets
+Code line: None
+Relevant code:
+export const pocketbase = new PocketBase('http://localhost:1984').autoCancellation(false);
+Description: The server address is hardcoded into the source code. This can lead to security issues if the server address needs to be changed or if it is confidential.
+Severity: Medium
+Fix: Store the server address in a secure configuration file or environment variable, and reference it from there.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/pocketbase.js
+Path: web/src/lib/pocketbase.js
+Vulnerability: Broken Authentication
+Code line: None
+Relevant code:
+export const currentUser = writable(pocketbase.authStore.model);
+Description: The current user's authentication model is being exported as a writable object. This could allow unauthorized modifications to the user's authentication state.
+Severity: High
+Fix: Ensure that the user's authentication state is properly encapsulated and cannot be modified directly from outside the authentication module.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/FlyingAmogus.svelte
+Path: web/src/lib/FlyingAmogus.svelte
+Vulnerability: Cross-Site Scripting (XSS)
+Code line: None
+Relevant code:
+<svelte:window bind:innerHeight={h} bind:innerWidth={w} />
+Description: Untrusted data inserted into HTML. The code binds the innerHeight and innerWidth properties of the window object to the variables h and w, which are not sanitized before being used.
+Severity: High
+Fix: Sanitize the variables h and w before using them in the binding. Use a library or built-in function to sanitize the input.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/FlyingAmogus.svelte
+Path: web/src/lib/FlyingAmogus.svelte
+Vulnerability: Insecure Randomness
+Code line: None
+Relevant code:
+color = chooseRandom(colors);
+Description: The color variable is assigned a random value from the colors array. This could potentially be exploited if an attacker can predict the random value.
+Severity: Low
+Fix: Use a secure random number generator to select a color from the colors array.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/FlyingAmogus.svelte
+Path: web/src/lib/FlyingAmogus.svelte
+Vulnerability: Cross-Site Scripting (XSS)
+Code line: None
+Relevant code:
+<span
+
+  style="
+
+  color: var(--{color});
+
+  top: {y}px;
+
+  left: {x}px;
+
+  transform: rotate({rotation}rad);
+
+">ඞ</span
+
+>
+Description: Untrusted data inserted into HTML. The color, y, x, and rotation variables are not sanitized before being used in the style attribute of the span element.
+Severity: High
+Fix: Sanitize the color, y, x, and rotation variables before using them in the style attribute. Use a library or built-in function to sanitize the input.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/auth/guards.js
+Path: web/src/lib/auth/guards.js
+Vulnerability: Injection Attacks
+Code line: None
+Relevant code:
+workspace = await locals.pocketbase.collection('workspaces').getOne(params.workspaceId);
+Description: Untrusted data sent to an interpreter. The workspaceId parameter is used directly in a database query without any sanitization or parameterization, which could lead to NoSQL injection if the workspaceId is user-supplied and not properly validated.
+Severity: High
+Fix: Use parameterized queries or prepared statements instead of string concatenation to prevent injection attacks. For example: locals.pocketbase.collection('workspaces').findOne({ _id: new ObjectId(params.workspaceId) });
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/auth/guards.js
+Path: web/src/lib/auth/guards.js
+Vulnerability: Broken Access Control
+Code line: None
+Relevant code:
+if (workspace.owner !== locals.user?.id) { throw error(403, 'You must own workspace to view it'); }
+Description: Users able to perform unauthorized actions. The code checks if the current user is the owner of the workspace, but it does not prevent other actions if the user is not the owner. This could potentially allow unauthorized actions.
+Severity: Medium
+Fix: Implement a comprehensive access control system that restricts actions based on user roles and permissions. For example, only allow certain actions if the user is the owner of the workspace.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/auth/guards.js
+Path: web/src/lib/auth/guards.js
+Vulnerability: Broken Authentication
+Code line: None
+Relevant code:
+if (!locals.user) throw error(403, 'You must be logged in to perform this action');
+Description: Incomplete or incorrect implementation of authentication. The code checks if a user is logged in, but it does not validate the user's session or token, which could potentially allow session hijacking or token theft.
+Severity: High
+Fix: Implement a comprehensive authentication system that validates user sessions or tokens. For example, use secure cookies for session management and validate tokens with every request.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/server/workspaceUtils.js
+Path: web/src/lib/server/workspaceUtils.js
+Vulnerability: Hardcoded Secrets
+Code line: None
+Relevant code:
+import { WORKSPACE_DATA_DIR } from '$env/static/private';
+
+import fs from 'node:fs';
+
+import path from 'node:path';
+Description: The code imports a private directory path from an environment file. If this file contains sensitive information like API keys, database credentials, etc., and it is not properly secured, it can lead to serious security issues.
+Severity: High
+Fix: Store sensitive data in secure and encrypted storage. Use environment variables to access these data. Make sure the environment file is added to .gitignore to prevent it from being committed to the version control system.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/server/workspaceUtils.js
+Path: web/src/lib/server/workspaceUtils.js
+Vulnerability: Insecure Data Storage
+Code line: None
+Relevant code:
+function getWorkspaceDir(workspaceId) {
+
+  const workspaceDir = path.join(WORKSPACE_DATA_DIR, workspaceId);
+
+  if (!fs.existsSync(workspaceDir)) {
+
+    fs.mkdirSync(workspaceDir);
+
+    addFile(workspaceId, 'main.sus');
+
+  }
+
+  return workspaceDir;
+
+}
+Description: The function creates a directory without checking for proper permissions. This can lead to unauthorized access to the data stored in the directory.
+Severity: Medium
+Fix: Check for proper permissions before creating a directory. Use chmod or similar functions to set appropriate permissions.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/server/workspaceUtils.js
+Path: web/src/lib/server/workspaceUtils.js
+Vulnerability: Broken Access Control
+Code line: None
+Relevant code:
+export function deleteWorkspace(workspaceId) {
+
+  const workspaceDir = path.join(WORKSPACE_DATA_DIR, workspaceId);
+
+  if (fs.existsSync(workspaceDir)) {
+
+    fs.rmdirSync(workspaceDir, { recursive: true });
+
+  }
+
+}
+Description: The function deletes a workspace directory without checking if the user has the necessary permissions to perform this action. This can lead to unauthorized deletion of data.
+Severity: High
+Fix: Implement role-based access control. Check if the user has the necessary permissions before performing the delete operation.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/server/workspaceUtils.js
+Path: web/src/lib/server/workspaceUtils.js
+Vulnerability: Unvalidated File Uploads
+Code line: None
+Relevant code:
+export function saveFile(workspaceId, filename, content) {
+
+  const filePath = getFilePath(workspaceId, filename);
+
+  fs.writeFileSync(filePath, content);
+
+}
+Description: The function saves a file without validating the content. This can lead to malicious file uploads.
+Severity: High
+Fix: Validate the content of the file before saving it. Check for malicious scripts, inappropriate content, etc.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/server/pocketbase.js
+Path: web/src/lib/server/pocketbase.js
+Vulnerability: Hardcoded Secrets
+Code line: None
+Relevant code:
+import { LOCAL_POCKETBASE_ADDRESS } from '$env/static/private';
+Description: The code imports a local address from a private file. This could potentially expose sensitive information if the file is not properly secured.
+Severity: High
+Fix: Store sensitive information in environment variables and access them using process.env in Node.js. Make sure to not include the .env file in the version control system.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/server/pocketbase.js
+Path: web/src/lib/server/pocketbase.js
+Vulnerability: Insecure Data Storage
+Code line: None
+Relevant code:
+export const pocketbase = new PocketBase(LOCAL_POCKETBASE_ADDRESS).autoCancellation(false);
+Description: The code creates a new PocketBase instance with autoCancellation set to false. This could potentially lead to data inconsistency or corruption if multiple requests are made simultaneously.
+Severity: Medium
+Fix: Set autoCancellation to true to ensure that only the most recent request is processed.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/server/pocketbase.js
+Path: web/src/lib/server/pocketbase.js
+Vulnerability: Information Leakage
+Code line: None
+Relevant code:
+console.error(notClientError);
+Description: The code logs errors to the console. This could potentially expose sensitive information if the error messages contain such information.
+Severity: Low
+Fix: Remove console.error statements or replace them with a secure logging solution that masks sensitive information.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/server/amogus_plus_plus/execute.js
+Path: web/src/lib/server/amogus_plus_plus/execute.js
+Vulnerability: Uncontrolled Resource Consumption
+Code line: None
+Relevant code:
+const MAX_ITERATIONS = 1000;
+Description: The code has a fixed maximum iteration limit which could lead to Denial of Service (DoS) if an attacker sends requests that cause the system to hit this limit.
+Severity: High
+Fix: Implement proper rate limiting and resource management to prevent DoS attacks.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/server/amogus_plus_plus/execute.js
+Path: web/src/lib/server/amogus_plus_plus/execute.js
+Vulnerability: Injection Attacks
+Code line: None
+Relevant code:
+export function execute(code, stdin, workspaceId) {
+  const runtime = new Runtime(stdin, workspaceId);
+Description: The function 'execute' takes 'code' as an argument and executes it. This could lead to injection attacks if the 'code' is not properly sanitized.
+Severity: Critical
+Fix: Sanitize and validate the 'code' input before executing it.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/server/amogus_plus_plus/execute.js
+Path: web/src/lib/server/amogus_plus_plus/execute.js
+Vulnerability: Information Leakage
+Code line: None
+Relevant code:
+if (err instanceof ExitError) {
+  return err.stdout;
+}
+Description: The code returns the standard output of an error. This could expose sensitive information to an attacker.
+Severity: Medium
+Fix: Do not expose internal details through error messages. Return a generic error message instead.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/server/amogus_plus_plus/runtime.js
+Path: web/src/lib/server/amogus_plus_plus/runtime.js
+Vulnerability: Injection Attacks
+Code line: None
+Relevant code:
+const content = fileContents(this.workspaceId, filename).toString();
+Description: Untrusted data sent to an interpreter. The filename is not sanitized before being used to read file contents.
+Severity: High
+Fix: Sanitize the filename before using it to read file contents. Use a whitelist of allowed characters or a library that provides filename sanitization.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/server/amogus_plus_plus/runtime.js
+Path: web/src/lib/server/amogus_plus_plus/runtime.js
+Vulnerability: Insecure Data Storage
+Code line: None
+Relevant code:
+this._storage[key] = value;
+Description: Inadequate protection of stored data. The key-value storage does not seem to have any access controls or encryption.
+Severity: Medium
+Fix: Implement access controls for the key-value storage and encrypt sensitive data.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/server/amogus_plus_plus/runtime.js
+Path: web/src/lib/server/amogus_plus_plus/runtime.js
+Vulnerability: Information Leakage
+Code line: None
+Relevant code:
+this._stdout += String.fromCharCode(char);
+Description: Exposing sensitive information. The stdout is directly manipulated without any checks, potentially exposing sensitive information.
+Severity: Medium
+Fix: Implement checks to prevent sensitive information from being written to stdout.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/server/amogus_plus_plus/executableStatements.js
+Path: web/src/lib/server/amogus_plus_plus/executableStatements.js
+Vulnerability: Insecure Direct Object References (IDOR)
+Code line: None
+Relevant code:
+removeFile(runtime.workspaceId, this.streamName);
+Description: The function 'removeFile' in the class 'ExecutableDeleteFile' is deleting a file based on user input without proper access controls. This could allow an attacker to delete any file.
+Severity: High
+Fix: Implement proper access controls to verify the user has the necessary permissions to delete the file.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/server/amogus_plus_plus/executableStatements.js
+Path: web/src/lib/server/amogus_plus_plus/executableStatements.js
+Vulnerability: Insecure Direct Object References (IDOR)
+Code line: None
+Relevant code:
+appendToFile(runtime.workspaceId, this.streamName, char);
+Description: The function 'appendToFile' in the class 'ExecutableWriteFile' is writing to a file based on user input without proper access controls. This could allow an attacker to write to any file.
+Severity: High
+Fix: Implement proper access controls to verify the user has the necessary permissions to write to the file.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/server/amogus_plus_plus/executableStatements.js
+Path: web/src/lib/server/amogus_plus_plus/executableStatements.js
+Vulnerability: Insecure Data Storage
+Code line: None
+Relevant code:
+const value = runtime.getFromStorage(this.varName);
+Description: The function 'getFromStorage' is used in multiple classes without proper access controls or encryption. This could allow an attacker to access sensitive data.
+Severity: Medium
+Fix: Implement proper access controls and encryption when storing and retrieving data.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/server/amogus_plus_plus/executableStatements.js
+Path: web/src/lib/server/amogus_plus_plus/executableStatements.js
+Vulnerability: Insecure Data Storage
+Code line: None
+Relevant code:
+runtime.addToStorage(this.varName, value);
+Description: The function 'addToStorage' is used in multiple classes without proper access controls or encryption. This could allow an attacker to modify stored data.
+Severity: Medium
+Fix: Implement proper access controls and encryption when storing data.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/amogus_plus_plus/highlightableStatements.js
+Path: web/src/lib/amogus_plus_plus/highlightableStatements.js
+Vulnerability: Cross-Site Scripting (XSS)
+Code line: None
+Relevant code:
+this.whitespacePrefix +
+
+      `<span style="color: var(--white)">IS <span style="color: var(--pink)">${this.streamName}</span> EMPTY <span style="color: var(--cyan)">${this.varName}</span> TELL ME PLS PLS PLS</span>`
+Description: Untrusted data inserted into HTML without proper sanitization. This can lead to malicious script execution in the user's browser.
+Severity: High
+Fix: Sanitize all variables inserted into HTML to prevent script execution. Use a library or framework that automatically escapes XSS by design, such as ReactJS or Angular.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/amogus_plus_plus/highlightableStatements.js
+Path: web/src/lib/amogus_plus_plus/highlightableStatements.js
+Vulnerability: Injection Attacks
+Code line: None
+Relevant code:
+`<span style="color: var(--white)">IS <span style="color: var(--pink)">${this.streamName}</span> EMPTY <span style="color: var(--cyan)">${this.varName}</span> TELL ME PLS PLS PLS</span>`
+Description: Untrusted data is being directly inserted into HTML which can lead to various injection attacks.
+Severity: High
+Fix: Use parameterized queries, prepared statements, or ORM libraries to prevent injection attacks. Avoid using interpreter features that execute commands composed from untrusted data.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/amogus_plus_plus/highlightableStatements.js
+Path: web/src/lib/amogus_plus_plus/highlightableStatements.js
+Vulnerability: Information Leakage
+Code line: None
+Relevant code:
+`<span style="color: var(--white)">IS <span style="color: var(--pink)">${this.streamName}</span> EMPTY <span style="color: var(--cyan)">${this.varName}</span> TELL ME PLS PLS PLS</span>`
+Description: Sensitive information might be exposed through error messages or other application outputs.
+Severity: Medium
+Fix: Ensure that error messages do not reveal sensitive information. Implement a global error handling middleware that catches all errors and sanitizes the output.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/amogus_plus_plus/highlightableStatements.js
+Path: web/src/lib/amogus_plus_plus/highlightableStatements.js
+Vulnerability: Insecure Data Storage
+Code line: None
+Relevant code:
+`<span style="color: var(--white)">IS <span style="color: var(--pink)">${this.streamName}</span> EMPTY <span style="color: var(--cyan)">${this.varName}</span> TELL ME PLS PLS PLS</span>`
+Description: Sensitive data might be stored insecurely, without proper encryption or access controls.
+Severity: High
+Fix: Ensure that all sensitive data is stored securely, using strong encryption algorithms and proper access controls.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/amogus_plus_plus/highlightableStatements.js
+Path: web/src/lib/amogus_plus_plus/highlightableStatements.js
+Vulnerability: Hardcoded Secrets
+Code line: None
+Relevant code:
+`<span style="color: var(--white)">IS <span style="color: var(--pink)">${this.streamName}</span> EMPTY <span style="color: var(--cyan)">${this.varName}</span> TELL ME PLS PLS PLS</span>`
+Description: Potential hardcoded secrets in the source code.
+Severity: High
+Fix: Remove all hardcoded secrets from the source code. Use secure environment variables or a secure vault to store secrets.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/amogus_plus_plus/statementsBases.js
+Path: web/src/lib/amogus_plus_plus/statementsBases.js
+Vulnerability: Injection Attacks - Untrusted data sent to an interpreter
+Code line: None
+Relevant code:
+return JSON.parse(strNumber);
+Description: The function StringToInt uses JSON.parse on input that could be untrusted, which can lead to injection attacks if the input is not properly sanitized.
+Severity: High
+Fix: Use a safer method to convert strings to integers, such as the built-in parseInt or parseFloat functions, and add input validation checks.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/amogus_plus_plus/statementsBases.js
+Path: web/src/lib/amogus_plus_plus/statementsBases.js
+Vulnerability: Insecure Direct Object References (IDOR)
+Code line: None
+Relevant code:
+super(/([^\s]+) HAS JOINED THE ([^\s]+)/, line);
+
+    this.varName = this.parts[1];
+
+    this.streamName = this.parts[2];
+Description: The WriteFileBase class constructor uses parts of the input line directly without checking for proper access controls, which can lead to unauthorized access to objects.
+Severity: Medium
+Fix: Add checks to ensure that the user has the necessary permissions to access the objects referenced by varName and streamName.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/amogus_plus_plus/statementsBases.js
+Path: web/src/lib/amogus_plus_plus/statementsBases.js
+Vulnerability: Broken Access Control
+Code line: None
+Relevant code:
+/**
+
+   * @param {string} line
+
+   */
+
+  constructor(line) {
+
+    super(/([^\s]+) WAS THE IMPOSTOR/, line);
+
+    this.varName = this.parts[1];
+
+  }
+Description: The ExitBase class constructor uses parts of the input line directly without checking for proper access controls, which can lead to users being able to perform unauthorized actions.
+Severity: High
+Fix: Add checks to ensure that the user has the necessary permissions to perform the actions referenced by varName.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/amogus_plus_plus/statementsBases.js
+Path: web/src/lib/amogus_plus_plus/statementsBases.js
+Vulnerability: Broken Authentication
+Code line: None
+Relevant code:
+/**
+
+   * @param {string} line
+
+   */
+
+  constructor(line) {
+
+    super(/([^\s]+) IS JUST LIKE ([^\s]+)/, line);
+
+    this.writeToVarName = this.parts[1];
+
+    this.readFromVarName = this.parts[2];
+
+  }
+Description: The VariableAssignmentBase class constructor uses parts of the input line directly without checking for proper authentication, which can lead to incomplete or incorrect implementation of authentication.
+Severity: High
+Fix: Add checks to ensure that the user is properly authenticated before allowing them to perform the actions referenced by writeToVarName and readFromVarName.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/amogus_plus_plus/common.js
+Path: web/src/lib/amogus_plus_plus/common.js
+Vulnerability: Injection Attacks
+Code line: None
+Relevant code:
+return new Statement(line);
+Description: Untrusted data sent to an interpreter. The code is creating a new Statement object with a line of code that could potentially be untrusted data.
+Severity: High
+Fix: Sanitize the 'line' input before passing it to the Statement constructor.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/amogus_plus_plus/common.js
+Path: web/src/lib/amogus_plus_plus/common.js
+Vulnerability: Injection Attacks
+Code line: None
+Relevant code:
+return new DefaultStatement(line);
+Description: Untrusted data sent to an interpreter. The code is creating a new DefaultStatement object with a line of code that could potentially be untrusted data.
+Severity: High
+Fix: Sanitize the 'line' input before passing it to the DefaultStatement constructor.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/amogus_plus_plus/abstractStatements.js
+Path: web/src/lib/amogus_plus_plus/abstractStatements.js
+Vulnerability: Broken Authentication
+Code line: None
+Relevant code:
+constructor(line) {}
+Description: The constructor in the StatementBase, HighlightableStatement, and ExecutableStatement classes does not perform any authentication or validation on the input 'line'. This could potentially allow for untrusted data to be passed into the object.
+Severity: High
+Fix: Implement input validation in the constructor to ensure only trusted data is used. For example: 
+
+constructor(line) {
+  if (typeof line !== 'string') {
+    throw new Error('Invalid input');
+  }
+  this.line = line;
+}
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/amogus_plus_plus/abstractStatements.js
+Path: web/src/lib/amogus_plus_plus/abstractStatements.js
+Vulnerability: Injection Attacks
+Code line: None
+Relevant code:
+execute(runtime) {}
+Description: The execute method in the ExecutableStatement class does not sanitize the 'runtime' input. This could potentially allow for injection attacks if untrusted data is passed as 'runtime'.
+Severity: High
+Fix: Implement input sanitization in the execute method to prevent injection attacks. For example: 
+
+execute(runtime) {
+  if (typeof runtime !== 'object' || runtime === null) {
+    throw new Error('Invalid runtime');
+  }
+  // Continue with execution
+}Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/+page.svelte
+Path: web/src/routes/+page.svelte
+Vulnerability: Cross-Site Scripting (XSS)
+Code line: None
+Relevant code:
+<span class="name"
+
+    >AMONGUSISABIGSUSSYBAKAHAHAHAHAHATHISLANGUAGEISREALLYCOOLPLEASEUSEITMYLIFEDEPENDSONITORELSEPLSPLSPLSPLSPLSPLSPLSkahyghdfhm++</span
+
+  >
+Description: Untrusted data inserted into HTML. This can allow an attacker to inject malicious scripts and change the content of the webpage.
+Severity: High
+Fix: Sanitize user input before inserting it into HTML. Use a secure method to encode user input, such as the 'encodeForHTML' method from OWASP's Java Encoder library.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/+error.svelte
+Path: web/src/routes/+error.svelte
+Vulnerability: Information Leakage
+Code line: None
+Relevant code:
+<h1>{$page.status}</h1>
+
+<p>{$page.error?.message}</p>
+Description: Exposing sensitive information in errors. The error message could potentially reveal sensitive information about the system's internal workings or configuration.
+Severity: Medium
+Fix: Implement a custom error page that does not expose any sensitive information. Instead of displaying the raw error message, log the error and display a generic message to the user.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/+layout.svelte
+Path: web/src/routes/+layout.svelte
+Vulnerability: Cross-Site Request Forgery (CSRF)
+Code line: None
+Relevant code:
+<form
+
+          method="POST"
+
+          action="/auth/logout"
+
+          use:enhance={() => {
+
+            return async ({ result }) => {
+
+              pocketbase.authStore.clear();
+
+
+
+              await applyAction(result);
+
+            };
+
+          }}
+
+        >
+
+          <button type="submit">Log out</button>
+
+        </form>
+Description: The logout form does not include any anti-CSRF tokens, which could allow an attacker to forge a logout request.
+Severity: Medium
+Fix: Add an anti-CSRF token to the logout form. This token should be generated server-side and included in the form. When the form is submitted, the server should verify the token.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/+layout.svelte
+Path: web/src/routes/+layout.svelte
+Vulnerability: Broken Access Control
+Code line: None
+Relevant code:
+{#if $currentUser}
+
+      <li><a href="/playground">Playground</a></li>
+
+    {/if}
+Description: The application checks if a user is logged in to display the Playground link, but it does not check if the user has the necessary permissions to access the Playground page.
+Severity: High
+Fix: Implement role-based access control (RBAC) to ensure that only users with the necessary permissions can access the Playground page.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/+layout.svelte
+Path: web/src/routes/+layout.svelte
+Vulnerability: Uncontrolled Resource Consumption
+Code line: None
+Relevant code:
+<audio bind:this={audio} src="/audio/theme.mp3" loop />
+Description: The audio file is set to loop indefinitely, which could lead to excessive bandwidth usage and potential Denial of Service (DoS) if many users are accessing the site simultaneously.
+Severity: Low
+Fix: Implement a mechanism to stop the audio after a certain number of loops or after a certain duration.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/+layout.svelte
+Path: web/src/routes/+layout.svelte
+Vulnerability: Cross-Site Scripting (XSS)
+Code line: None
+Relevant code:
+<span class="text">Logged in as <span class="username">{$currentUser.username}</span></span>
+Description: The application inserts the username directly into HTML without sanitizing it, which could allow an attacker to execute arbitrary JavaScript code in the user's browser.
+Severity: High
+Fix: Sanitize the username before inserting it into HTML to prevent potential XSS attacks.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/playground/+page.svelte
+Path: web/src/routes/playground/+page.svelte
+Vulnerability: Cross-Site Request Forgery (CSRF)
+Code line: None
+Relevant code:
+<form method="POST" action="?/deleteWorkspace" use:enhance>
+
+        <input hidden name="id" value={workspace.id} />
+
+        <button>DELETE</button>
+
+      </form>
+Description: The application may be vulnerable to Cross-Site Request Forgery (CSRF) as it does not appear to include any anti-CSRF tokens in its forms. This could allow an attacker to trick a victim into making an unwanted request to the application.
+Severity: High
+Fix: Implement anti-CSRF tokens in all forms. This can be done by including a hidden field in the form that contains a token. This token should be tied to the user's session and checked on the server side when the form is submitted.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/playground/+page.svelte
+Path: web/src/routes/playground/+page.svelte
+Vulnerability: Insecure Direct Object References (IDOR)
+Code line: None
+Relevant code:
+<form method="POST" action="?/deleteWorkspace" use:enhance>
+
+        <input hidden name="id" value={workspace.id} />
+
+        <button>DELETE</button>
+
+      </form>
+Description: The application may be vulnerable to Insecure Direct Object References (IDOR) as it appears to reference objects directly without proper access controls. This could allow an attacker to manipulate these references to access unauthorized data.
+Severity: High
+Fix: Implement proper access controls to verify that the user is authorized to access the referenced object. This can be done by checking the user's permissions before allowing access to the object.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/playground/+page.server.js
+Path: web/src/routes/playground/+page.server.js
+Vulnerability: Injection Attacks
+Code line: None
+Relevant code:
+filter: `owner = '${locals.user.id}'`,
+Description: Untrusted data sent to an interpreter. In this case, the user ID is directly inserted into a filter string without sanitization, which could lead to SQL injection if the user ID is not properly validated.
+Severity: High
+Fix: Use parameterized queries or prepared statements instead of string concatenation to prevent SQL injection. For example: filter: { owner: locals.user.id }
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/playground/+page.server.js
+Path: web/src/routes/playground/+page.server.js
+Vulnerability: Broken Authentication
+Code line: None
+Relevant code:
+mustBeLoggedIn(locals);
+Description: Incomplete or incorrect implementation of authentication. The mustBeLoggedIn function is used without checking its return value, which could lead to broken authentication if the function fails but execution continues.
+Severity: High
+Fix: Check the return value of mustBeLoggedIn function and handle the case where it fails. For example: if (!mustBeLoggedIn(locals)) { throw error(401, 'Unauthorized'); }
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/playground/+page.server.js
+Path: web/src/routes/playground/+page.server.js
+Vulnerability: Cross-Site Scripting (XSS)
+Code line: None
+Relevant code:
+const data = Object.fromEntries(await request.formData());
+Description: Untrusted data inserted into HTML. The form data is directly used without sanitization, which could lead to Cross-Site Scripting (XSS) if the data includes malicious scripts.
+Severity: High
+Fix: Sanitize the form data before using it. For example, use a library like DOMPurify to sanitize the data.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/playground/+page.server.js
+Path: web/src/routes/playground/+page.server.js
+Vulnerability: Broken Access Control
+Code line: None
+Relevant code:
+locals.pocketbase.collection('workspaces').delete(data.id);
+Description: Users able to perform unauthorized actions. The delete operation is performed without checking if the current user has the right to delete the workspace, which could lead to unauthorized deletion of workspaces.
+Severity: High
+Fix: Check if the current user has the right to delete the workspace before performing the delete operation. For example: if (locals.user.id !== workspace.owner) { throw error(403, 'Forbidden'); }Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/auth/signup/+page.svelte
+Path: web/src/routes/auth/signup/+page.svelte
+Vulnerability: Sensitive Data Exposure
+Code line: None
+Relevant code:
+pocketbase.authStore.loadFromCookie(document.cookie);
+Description: The application is loading authentication data directly from cookies. This can expose sensitive user information if the cookies are not properly secured.
+Severity: High
+Fix: Use secure, HttpOnly cookies and ensure that sensitive data is not stored directly in cookies. Consider using a server-side session management system.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/auth/signup/+page.svelte
+Path: web/src/routes/auth/signup/+page.svelte
+Vulnerability: Password Management Weaknesses
+Code line: None
+Relevant code:
+<input id="password" name="password" type="password" size="50" minlength="5" required />
+Description: The minimum length for passwords is set to 5, which is too short and can lead to weak passwords that are easy to crack.
+Severity: Medium
+Fix: Increase the minimum password length to at least 8 characters and implement complexity requirements such as the use of uppercase letters, lowercase letters, numbers, and special characters.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/auth/signup/+page.svelte
+Path: web/src/routes/auth/signup/+page.svelte
+Vulnerability: Cross-Site Request Forgery (CSRF)
+Code line: None
+Relevant code:
+<form method="POST">
+Description: The form does not include any anti-CSRF tokens, which can make it vulnerable to CSRF attacks where an attacker tricks a victim into performing actions on their behalf.
+Severity: High
+Fix: Implement anti-CSRF tokens in forms to prevent CSRF attacks. The server should generate a unique token for each session and include it in the form. The server should then verify this token on each POST request.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/auth/signup/+page.server.js
+Path: web/src/routes/auth/signup/+page.server.js
+Vulnerability: Broken Authentication
+Code line: None
+Relevant code:
+const data = Object.fromEntries(await request.formData());
+
+
+
+    data.passwordConfirm = data.password;
+
+
+
+    try {
+
+      await locals.pocketbase.collection('users').create(data);
+
+      await locals.pocketbase.collection('users').authWithPassword(data.username, data.password);
+
+    } catch (err) {
+
+      tryHandlePocketbaseError(err);
+
+    }
+Description: The password confirmation is being set to the password directly without any checks. This could lead to weak passwords being used and hence broken authentication.
+Severity: High
+Fix: Implement a strong password policy. Check the password against the policy before setting it to the passwordConfirm field.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/auth/signup/+page.server.js
+Path: web/src/routes/auth/signup/+page.server.js
+Vulnerability: Sensitive Data Exposure
+Code line: None
+Relevant code:
+const data = Object.fromEntries(await request.formData());
+
+
+
+    data.passwordConfirm = data.password;
+
+
+
+    try {
+
+      await locals.pocketbase.collection('users').create(data);
+
+      await locals.pocketbase.collection('users').authWithPassword(data.username, data.password);
+
+    } catch (err) {
+
+      tryHandlePocketbaseError(err);
+
+    }
+Description: The password is being sent in plain text to the 'authWithPassword' function. This could lead to sensitive data exposure if the connection is not secure.
+Severity: High
+Fix: Encrypt the password before sending it to the 'authWithPassword' function.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/auth/signup/+page.server.js
+Path: web/src/routes/auth/signup/+page.server.js
+Vulnerability: Injection Attacks
+Code line: None
+Relevant code:
+const data = Object.fromEntries(await request.formData());
+
+
+
+    data.passwordConfirm = data.password;
+
+
+
+    try {
+
+      await locals.pocketbase.collection('users').create(data);
+
+      await locals.pocketbase.collection('users').authWithPassword(data.username, data.password);
+
+    } catch (err) {
+
+      tryHandlePocketbaseError(err);
+
+    }
+Description: The user input is directly used to create a new user in the database without any sanitization. This could lead to injection attacks.
+Severity: High
+Fix: Sanitize the user input before using it to create a new user in the database.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/auth/logout/+page.server.js
+Path: web/src/routes/auth/logout/+page.server.js
+Vulnerability: Open Redirects
+Code line: None
+Relevant code:
+throw redirect(303, '/');
+Description: The application redirects the request to an URL which is fetched from untrusted sources. This could allow an attacker to redirect a user to a malicious site for phishing or other exploits.
+Severity: Medium
+Fix: Validate and sanitize the URL before redirecting. Avoid using user input directly in the redirection function.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/auth/logout/+page.server.js
+Path: web/src/routes/auth/logout/+page.server.js
+Vulnerability: Broken Authentication
+Code line: None
+Relevant code:
+locals.pocketbase.authStore.clear();
+
+locals.user = null;
+Description: The application does not properly manage the user session after logout. This could allow an attacker to use the old session to gain unauthorized access.
+Severity: High
+Fix: Ensure that the user session is invalidated server-side after logout. Also, set the session cookie to 'null' or delete the session cookie client-side.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/auth/login/+page.svelte
+Path: web/src/routes/auth/login/+page.svelte
+Vulnerability: Sensitive Data Exposure
+Code line: None
+Relevant code:
+pocketbase.authStore.loadFromCookie(document.cookie);
+Description: The application is loading authentication data directly from cookies. This can expose sensitive user information if the cookies are not properly secured.
+Severity: High
+Fix: Use secure, HttpOnly cookies and ensure that sensitive data is not stored directly in cookies. Consider using a server-side session management system.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/auth/login/+page.svelte
+Path: web/src/routes/auth/login/+page.svelte
+Vulnerability: Password Management Weaknesses
+Code line: None
+Relevant code:
+<input id="password" name="password" type="password" size="50" required />
+Description: The application does not appear to implement any kind of password complexity requirements or checks.
+Severity: Medium
+Fix: Implement password complexity requirements and checks to ensure that users choose strong, secure passwords.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/auth/login/+page.svelte
+Path: web/src/routes/auth/login/+page.svelte
+Vulnerability: Cross-Site Request Forgery (CSRF)
+Code line: None
+Relevant code:
+<form method="POST">
+Description: The application does not appear to implement any kind of anti-CSRF tokens in its forms.
+Severity: High
+Fix: Implement anti-CSRF tokens in all forms to prevent cross-site request forgery attacks.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/auth/login/+page.server.js
+Path: web/src/routes/auth/login/+page.server.js
+Vulnerability: Injection Attacks
+Code line: None
+Relevant code:
+const data = Object.fromEntries(await request.formData());
+Description: Untrusted data sent to an interpreter. In this case, the user input is directly used without any sanitization or validation.
+Severity: High
+Fix: Sanitize and validate user input before using it. Use a library or framework that automatically escapes user input.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/auth/login/+page.server.js
+Path: web/src/routes/auth/login/+page.server.js
+Vulnerability: Broken Authentication
+Code line: None
+Relevant code:
+await locals.pocketbase.collection('users').authWithPassword(data.identity, data.password);
+Description: Incomplete or incorrect implementation of authentication. In this case, the password is being sent in plaintext which can be intercepted and misused.
+Severity: High
+Fix: Use secure methods for transmitting passwords, such as hashing and salting the password before sending it.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/auth/login/+page.server.js
+Path: web/src/routes/auth/login/+page.server.js
+Vulnerability: Unvalidated Redirects and Forwards
+Code line: None
+Relevant code:
+throw redirect(303, '/');
+Description: Redirecting to untrusted URLs. In this case, the redirect URL is hardcoded and does not validate if the user is authenticated or not.
+Severity: Medium
+Fix: Validate user authentication status before redirecting. Redirect to a login page if the user is not authenticated.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/workspace/[workspaceId]/+page.svelte
+Path: web/src/routes/workspace/[workspaceId]/+page.svelte
+Vulnerability: Insecure Direct Object References (IDOR)
+Code line: None
+Relevant code:
+const response = await fetch(`/workspace/${data.id}/${activeFile}`);
+
+    editorContent = await response.json();
+Description: The application uses user-supplied input in a direct object reference, which can allow unauthorized access to data.
+Severity: High
+Fix: Implement proper access controls to verify the user is authorized to access the specified data.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/workspace/[workspaceId]/+page.svelte
+Path: web/src/routes/workspace/[workspaceId]/+page.svelte
+Vulnerability: Broken Access Control
+Code line: None
+Relevant code:
+await fetch(`/workspace/${data.id}/${activeFile}`, {
+
+      method: 'PUT',
+
+      body: JSON.stringify({ content: editorContent })
+
+    });
+Description: The application allows users to modify data they may not be authorized to change.
+Severity: High
+Fix: Implement proper access controls to verify the user is authorized to modify the specified data.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/workspace/[workspaceId]/+page.svelte
+Path: web/src/routes/workspace/[workspaceId]/+page.svelte
+Vulnerability: Injection Attacks
+Code line: None
+Relevant code:
+const response = await fetch(`/workspace/${data.id}/${activeFile}`, {
+
+      method: 'POST',
+
+      body: JSON.stringify({ stdin })
+
+    });
+Description: The application uses user-supplied input in a server-side request, which can allow for injection attacks.
+Severity: High
+Fix: Sanitize user input before using it in server-side requests.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/workspace/[workspaceId]/+page.svelte
+Path: web/src/routes/workspace/[workspaceId]/+page.svelte
+Vulnerability: Cross-Site Scripting (XSS)
+Code line: None
+Relevant code:
+<a on:click={onFileClick} class={file === activeFile ? 'active' : ''}>{file}</a>
+Description: The application inserts user-supplied input into HTML content, which can allow for cross-site scripting attacks.
+Severity: Medium
+Fix: Sanitize user input before inserting it into HTML content.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/workspace/[workspaceId]/+page.svelte
+Path: web/src/routes/workspace/[workspaceId]/+page.svelte
+Vulnerability: Sensitive Data Exposure
+Code line: None
+Relevant code:
+<input hidden name="filename" value={file} />
+Description: The application exposes potentially sensitive information in hidden form fields.
+Severity: Low
+Fix: Avoid storing sensitive information in hidden form fields.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/workspace/[workspaceId]/+page.server.js
+Path: web/src/routes/workspace/[workspaceId]/+page.server.js
+Vulnerability: Injection Attacks
+Code line: None
+Relevant code:
+const data = Object.fromEntries(await request.formData());
+Description: Untrusted data sent to an interpreter. The code is taking user input directly without sanitizing it which can lead to injection attacks.
+Severity: High
+Fix: Sanitize user input before using it. Use a library or built-in functions to sanitize the input.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/workspace/[workspaceId]/+page.server.js
+Path: web/src/routes/workspace/[workspaceId]/+page.server.js
+Vulnerability: Broken Authentication
+Code line: None
+Relevant code:
+mustBeLoggedIn(locals);
+Description: Incomplete or incorrect implementation of authentication. The code is checking if the user is logged in but not checking if the user has the right permissions to perform the action.
+Severity: Medium
+Fix: Implement role-based access control. Check if the user has the right permissions to perform the action.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/workspace/[workspaceId]/+page.server.js
+Path: web/src/routes/workspace/[workspaceId]/+page.server.js
+Vulnerability: Unvalidated File Uploads
+Code line: None
+Relevant code:
+addFile(params.workspaceId, data.filename);
+Description: Malicious file uploads. The code is allowing file uploads without validating the file type or checking for malicious content.
+Severity: High
+Fix: Validate file type before uploading. Check for malicious content in the file.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/workspace/[workspaceId]/+page.server.js
+Path: web/src/routes/workspace/[workspaceId]/+page.server.js
+Vulnerability: Broken Access Control
+Code line: None
+Relevant code:
+removeFile(params.workspaceId, data.filename);
+Description: Users able to perform unauthorized actions. The code is allowing users to delete files without checking if they have the right permissions.
+Severity: High
+Fix: Implement role-based access control. Check if the user has the right permissions to delete the file.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/workspace/[workspaceId]/+page.server.js
+Path: web/src/routes/workspace/[workspaceId]/+page.server.js
+Vulnerability: Information Leakage
+Code line: None
+Relevant code:
+throw error(500, 'Unable to create file');
+Description: Exposing sensitive information in errors. The code is throwing an error with a detailed message which can expose sensitive information.
+Severity: Low
+Fix: Throw generic error messages. Do not expose sensitive information in error messages.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/workspace/[workspaceId]/[filename]/+server.js
+Path: web/src/routes/workspace/[workspaceId]/[filename]/+server.js
+Vulnerability: Injection Attacks
+Code line: None
+Relevant code:
+const { stdin } = await request.json();
+Description: Untrusted data sent to an interpreter. The code is taking user input directly without sanitizing it, which can lead to injection attacks.
+Severity: High
+Fix: Sanitize the user input before using it. Use a library or framework that makes it impossible to inject malicious code.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/workspace/[workspaceId]/[filename]/+server.js
+Path: web/src/routes/workspace/[workspaceId]/[filename]/+server.js
+Vulnerability: Insecure Deserialization
+Code line: None
+Relevant code:
+const code = fileContents(params.workspaceId, params.filename).toString();
+
+      response.stdout = execute(code, stdin, params.workspaceId);
+Description: Untrusted data affecting object creation. The code is executing a file's content without checking its integrity, which can lead to insecure deserialization attacks.
+Severity: High
+Fix: Validate and check the integrity of the file's content before executing it.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/workspace/[workspaceId]/[filename]/+server.js
+Path: web/src/routes/workspace/[workspaceId]/[filename]/+server.js
+Vulnerability: Broken Access Control
+Code line: None
+Relevant code:
+response.files = workspaceFiles(params.workspaceId);
+Description: Users able to perform unauthorized actions. The code is listing workspace files without checking if the user has the right to access them, which can lead to unauthorized data access.
+Severity: High
+Fix: Implement role-based access control. Check if the user has the right to access the workspace files before listing them.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/workspace/[workspaceId]/[filename]/+server.js
+Path: web/src/routes/workspace/[workspaceId]/[filename]/+server.js
+Vulnerability: Unvalidated File Uploads
+Code line: None
+Relevant code:
+saveFile(params.workspaceId, params.filename, data.content);
+Description: Malicious file uploads. The code is saving a file without validating its content, which can lead to malicious file uploads.
+Severity: High
+Fix: Validate the file content before saving it. Check for malicious code and only allow certain types of files to be uploaded.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/docs/+page.svelte
+Path: web/src/routes/docs/+page.svelte
+Vulnerability: Information Leakage
+Code line: None
+Relevant code:
+<span class="lang">
+
+    >AMONGUSISABIGSUSSYBAKAHAHAHAHAHATHISLANGUAGEISREALLYCOOLPLEASEUSEITMYLIFEDEPENDSONITORELSEPLSPLSPLSPLSPLSPLSPLSkahyghdfhm++</span
+
+  >
+Description: Sensitive information is exposed in the source code. This could potentially be used by an attacker to gain unauthorized access or knowledge about the system.
+Severity: Medium
+Fix: Remove or obfuscate sensitive information from the source code.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/docs/+page.svelte
+Path: web/src/routes/docs/+page.svelte
+Vulnerability: Injection Attacks
+Code line: None
+Relevant code:
+<script>
+
+  import { highlight } from '$lib/amogus_plus_plus/highlightableStatements';
+
+
+
+  const examples = [
+
+    {
+
+      name: 'File echo',
+
+      code: `
+
+IS input.txt EMPTY RED TELL ME PLS PLS PLS
+
+GAME output.txt HAS FINISHED
+
+
+
+WHILE ITS NOT RED VOTE ME
+
+BLOCKUS
+
+	CHAR HAS LEFT THE input.txt
+
+	CHAR HAS JOINED THE output.txt
+
+	IS input.txt EMPTY RED TELL ME PLS PLS PLS
+
+ENDBLOCKUS
+
+`.trim()
+
+    },
+Description: The code is vulnerable to injection attacks. An attacker could potentially inject malicious code into the application.
+Severity: High
+Fix: Sanitize all user inputs and use parameterized queries or prepared statements to prevent injection attacks.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/routes/docs/+page.svelte
+Path: web/src/routes/docs/+page.svelte
+Vulnerability: Cross-Site Scripting (XSS)
+Code line: None
+Relevant code:
+<style lang="scss">
+
+  * {
+
+    color: var(--white);
+
+  }
+Description: The code is vulnerable to Cross-Site Scripting (XSS) attacks. An attacker could potentially inject malicious scripts into the web page, which would then be executed in the browser of any user viewing the page.
+Severity: High
+Fix: Sanitize all user inputs and use Content Security Policy (CSP) headers to prevent XSS attacks.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/pocketbase/pb_migrations/1689615071_collections_snapshot.js
+Path: pocketbase/pb_migrations/1689615071_collections_snapshot.js
+Vulnerability: Weak Cryptography
+Code line: None
+Relevant code:
+"minPasswordLength": 5
+Description: The minimum password length is set to 5, which is too short and can be easily brute-forced.
+Severity: High
+Fix: Increase the minimum password length to at least 8 characters.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/pocketbase/pb_migrations/1689615071_collections_snapshot.js
+Path: pocketbase/pb_migrations/1689615071_collections_snapshot.js
+Vulnerability: Broken Authentication
+Code line: None
+Relevant code:
+"allowEmailAuth": true,
+
+        "allowOAuth2Auth": false,
+
+        "allowUsernameAuth": true
+Description: The system allows email and username authentication but does not allow OAuth2 authentication. This could lead to broken authentication as OAuth2 provides an additional layer of security.
+Severity: Medium
+Fix: Enable OAuth2 authentication.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/pocketbase/pb_migrations/1689615071_collections_snapshot.js
+Path: pocketbase/pb_migrations/1689615071_collections_snapshot.js
+Vulnerability: Broken Access Control
+Code line: None
+Relevant code:
+"createRule": "",
+
+      "updateRule": "id = @request.auth.id",
+
+      "deleteRule": "id = @request.auth.id"
+Description: The create rule is empty, which means any user can create a new record. The update and delete rules are only checking if the user ID matches the authenticated user's ID, without checking their permissions.
+Severity: High
+Fix: Implement proper access control rules for creating, updating, and deleting records.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/pocketbase/pb_migrations/1689615071_collections_snapshot.js
+Path: pocketbase/pb_migrations/1689615071_collections_snapshot.js
+Vulnerability: Broken Authentication
+Code line: None
+Relevant code:
+"requireEmail": false
+Description: The system does not require an email for user registration. This could lead to broken authentication as email verification is an important step in confirming a user's identity.
+Severity: Medium
+Fix: Require an email for user registration and implement email verification.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/pocketbase/pb_migrations/1689615071_collections_snapshot.js
+Path: pocketbase/pb_migrations/1689615071_collections_snapshot.js
+Vulnerability: Broken Access Control
+Code line: None
+Relevant code:
+"manageRule": null
+Description: The manage rule is null, which means there are no restrictions on who can manage users. This could lead to unauthorized users gaining access to sensitive information or performing unauthorized actions.
+Severity: High
+Fix: Implement a manage rule that restricts user management to authorized users only.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/nginx/conf/default.conf
+Path: nginx/conf/default.conf
+Vulnerability: Inadequate Transport Layer Protection
+Code line: None
+Relevant code:
+listen 80;
+Description: The server is configured to listen on port 80, which is the default port for unencrypted HTTP traffic. This could allow an attacker to intercept sensitive data.
+Severity: High
+Fix: Change the server configuration to listen on port 443 and use HTTPS for encrypted communication. You may need to obtain and install an SSL certificate for your domain.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/nginx/conf/default.conf
+Path: nginx/conf/default.conf
+Vulnerability: Uncontrolled Resource Consumption
+Code line: None
+Relevant code:
+client_max_body_size 10M;
+Description: The server is configured to accept request bodies up to 10MB in size. This could be exploited by an attacker to cause a denial of service by sending very large requests.
+Severity: Medium
+Fix: Reduce the maximum request body size to a value that is appropriate for your application. Consider implementing rate limiting to prevent an attacker from sending a large number of requests in a short period of time.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/nginx/conf/default.conf
+Path: nginx/conf/default.conf
+Vulnerability: Server-Side Request Forgery (SSRF)
+Code line: None
+Relevant code:
+proxy_pass http://pocketbase:8090;
+Description: The server is configured to forward requests to another server on the internal network. This could be exploited by an attacker to send arbitrary requests to the internal server.
+Severity: High
+Fix: Validate the paths and parameters of incoming requests before forwarding them to the internal server. Consider using a firewall or other security measures to restrict access to the internal network.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/cleaner/cleaner.sh
+Path: cleaner/cleaner.sh
+Vulnerability: Injection Attacks
+Code line: None
+Relevant code:
+find "/tmp/data/" \
+
+        -type d \
+
+        -and -not -path "/tmp/data/" \
+
+        -and -not -newermt "-900 seconds" \
+
+        -exec rm -r {} +
+Description: Untrusted data sent to an interpreter. In this case, the script is vulnerable to path traversal and file inclusion vulnerabilities. An attacker could potentially manipulate the path to access sensitive information or execute arbitrary code.
+Severity: High
+Fix: Use a safer method for file deletion that does not rely on user input. Validate and sanitize all user inputs. Consider using a whitelist of allowed paths.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/cleaner/cleaner.sh
+Path: cleaner/cleaner.sh
+Vulnerability: Uncontrolled Resource Consumption
+Code line: None
+Relevant code:
+sleep 60
+Description: The script is continuously running in a loop with a sleep of 60 seconds. This could potentially lead to resource exhaustion if multiple instances of the script are running simultaneously.
+Severity: Medium
+Fix: Implement a mechanism to ensure that only one instance of the script can run at a time. Consider using a lock file or a PID file.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/cleaner/cleaner.sh
+Path: cleaner/cleaner.sh
+Vulnerability: Security Misconfiguration
+Code line: None
+Relevant code:
+#!/bin/sh
+Description: The script is running with sh, which might not be the most secure shell available. Depending on the system configuration, it might be vulnerable to various attacks.
+Severity: Low
+Fix: Consider using a more secure shell, like bash, and enable strict mode to prevent many types of errors.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/cleaner/Dockerfile
+Path: cleaner/Dockerfile
+Vulnerability: Insecure File Permissions
+Code line: None
+Relevant code:
+COPY cleaner.sh /var/cleaner.sh
+Description: The script file 'cleaner.sh' is copied to '/var/cleaner.sh' without setting proper permissions. This could allow unauthorized users to modify the script.
+Severity: Medium
+Fix: Set proper permissions for the script file after copying it. For example, use 'RUN chmod 755 /var/cleaner.sh' to set read and execute permissions for everyone and only write permissions for the owner.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/cleaner/Dockerfile
+Path: cleaner/Dockerfile
+Vulnerability: Insecure User Configuration
+Code line: None
+Relevant code:
+RUN useradd --no-create-home --shell /bin/false --uid 1000 --user-group cleaner
+Description: A user 'cleaner' is created with a non-interactive shell '/bin/false'. This could limit the ability to troubleshoot issues with this user.
+Severity: Low
+Fix: Consider providing a valid shell for the user. For example, use '--shell /bin/bash' instead of '--shell /bin/false'.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/cleaner/Dockerfile
+Path: cleaner/Dockerfile
+Vulnerability: Insecure User Privileges
+Code line: None
+Relevant code:
+USER cleaner
+Description: The Dockerfile is configured to run as the 'cleaner' user. If this user has unnecessary privileges, it could lead to unauthorized access or privilege escalation.
+Severity: Medium
+Fix: Ensure that the 'cleaner' user has the least privileges necessary to perform its tasks. Review and limit its permissions as necessary.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/0k7306kbusox68n/main.sus
+Path: data/0k7306kbusox68n/main.sus
+Vulnerability: Insecure Data Storage
+Code line: None
+Relevant code:
+WNBT4rUnJAayD GOES DOWN BY 255
+Description: The code seems to be manipulating data without any form of validation or checks. This could lead to insecure data storage and potential data corruption.
+Severity: High
+Fix: Implement data validation and checks before manipulating data. Ensure that the data being manipulated is within acceptable ranges and formats.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/0k7306kbusox68n/main.sus
+Path: data/0k7306kbusox68n/main.sus
+Vulnerability: Broken Authentication
+Code line: None
+Relevant code:
+WokReP38yWznh HAS JOINED THE YfMg2Y.WkWpM.out
+Description: The code seems to be allowing users to join without any form of authentication or checks. This could lead to unauthorized access.
+Severity: High
+Fix: Implement proper authentication mechanisms before allowing users to join. This could include password checks, two-factor authentication, etc.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/0k7306kbusox68n/main.sus
+Path: data/0k7306kbusox68n/main.sus
+Vulnerability: Broken Access Control
+Code line: None
+Relevant code:
+WNBT4rUnJAayD HAS LEFT THE UHkHeq2cE8RG.in
+Description: The code seems to be allowing users to leave without any form of validation or checks. This could lead to unauthorized actions.
+Severity: High
+Fix: Implement proper access control mechanisms before allowing users to leave. This could include role checks, session validation, etc.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/0k7306kbusox68n/main.sus
+Path: data/0k7306kbusox68n/main.sus
+Vulnerability: Injection Attacks
+Code line: None
+Relevant code:
+GUYS I CAN VOUCH WokReP38yWznh IS 2
+Description: The code seems to be accepting user input without any form of sanitization or checks. This could lead to injection attacks.
+Severity: High
+Fix: Implement proper input sanitization and checks before accepting user input. This could include SQL injection prevention, XSS prevention, etc.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/v39abhovtnp7n7o/main.sus
+Path: data/v39abhovtnp7n7o/main.sus
+Vulnerability: Uncontrolled Resource Consumption
+Code line: None
+Relevant code:
+BcEiy7dwkhN1p GOES UP BY 10
+
+BcEiy7dwkhN1p GOES DOWN BY 123
+
+BcEiy7dwkhN1p GOES UP BY 112
+
+BcEiy7dwkhN1p GOES DOWN BY 255
+Description: The code allows for a large number of operations to be performed on the 'BcEiy7dwkhN1p' object without any rate limiting or checks. This could potentially lead to a Denial of Service (DoS) attack if an attacker is able to manipulate these operations.
+Severity: High
+Fix: Implement rate limiting or checks to prevent a large number of operations from being performed on the 'BcEiy7dwkhN1p' object in a short period of time.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/v39abhovtnp7n7o/main.sus
+Path: data/v39abhovtnp7n7o/main.sus
+Vulnerability: Insecure Data Storage
+Code line: None
+Relevant code:
+kDTmsp8fIDcsk GOES UP
+
+kDTmsp8fIDcsk GOES DOWN BY 10
+Description: The code allows for the 'kDTmsp8fIDcsk' object to be manipulated without any checks or validation. This could potentially lead to unauthorized access or manipulation of data.
+Severity: Medium
+Fix: Implement checks or validation to ensure that only authorized operations can be performed on the 'kDTmsp8fIDcsk' object.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/v39abhovtnp7n7o/main.sus
+Path: data/v39abhovtnp7n7o/main.sus
+Vulnerability: Broken Access Control
+Code line: None
+Relevant code:
+WHILE ITS NOT FYRLMqoFF_iGb VOTE ME
+
+BLOCKUS
+
+ks1K38c_bFoNG GOES UP
+
+FYRLMqoFF_iGb GOES DOWN
+Description: The code allows for the 'ks1K38c_bFoNG' and 'FYRLMqoFF_iGb' objects to be manipulated without any role-based access controls or direct object references. This could potentially lead to unauthorized actions being performed.
+Severity: High
+Fix: Implement role-based access controls or direct object references to ensure that only authorized actions can be performed on the 'ks1K38c_bFoNG' and 'FYRLMqoFF_iGb' objects.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/v39abhovtnp7n7o/yqNLFDp_qmNk.out
+Path: data/v39abhovtnp7n7o/yqNLFDp_qmNk.out
+Vulnerability: Hardcoded Secrets
+Code line: None
+Relevant code:
+HLTnAaZUcZ
+Description: Credentials or secrets in code; Check source code for hardcoded passwords, API keys, etc.
+Severity: High
+Fix: Replace hardcoded secrets with environment variables or secure secret management system.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/v39abhovtnp7n7o/Zd.DVo4.L.To.in
+Path: data/v39abhovtnp7n7o/Zd.DVo4.L.To.in
+Vulnerability: Hardcoded Secrets
+Code line: None
+Relevant code:
+o@9Yuz4T?
+Description: Credentials or secrets in code; Check source code for hardcoded passwords, API keys, etc.
+Severity: High
+Fix: Remove hardcoded secrets and use secure methods such as environment variables or secure vaults.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/ameqhwg64zeakr9/main.sus
+Path: data/ameqhwg64zeakr9/main.sus
+Vulnerability: Insecure Data Storage
+Code line: None
+Relevant code:
+sFYsPa1o93CJX GOES DOWN BY 255
+Description: The code is manipulating data without proper validation or checks, which can lead to data corruption or unauthorized access.
+Severity: High
+Fix: Implement proper data validation and checks before manipulating data.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/ameqhwg64zeakr9/main.sus
+Path: data/ameqhwg64zeakr9/main.sus
+Vulnerability: Broken Authentication
+Code line: None
+Relevant code:
+eHsD_5sTAsv91 HAS JOINED THE bx.DqBHHhDVY.out
+Description: The code seems to allow users to join without proper authentication or checks, which can lead to unauthorized access.
+Severity: High
+Fix: Implement proper authentication and checks before allowing users to join.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/ameqhwg64zeakr9/main.sus
+Path: data/ameqhwg64zeakr9/main.sus
+Vulnerability: Information Leakage
+Code line: None
+Relevant code:
+IS wZ0.dyZuRC_9.in EMPTY O4D4FSbYepuXv TELL ME PLS PLS PLS
+Description: The code seems to be leaking information about the state of the system, which can be exploited by attackers.
+Severity: Medium
+Fix: Remove or obfuscate sensitive information from the output.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/ameqhwg64zeakr9/main.sus
+Path: data/ameqhwg64zeakr9/main.sus
+Vulnerability: Sensitive Data Exposure
+Code line: None
+Relevant code:
+mNLt9PKSu4Q84 WAS THE IMPOSTOR
+Description: The code is exposing sensitive user information without proper checks, which can lead to privacy violations.
+Severity: High
+Fix: Implement proper checks and permissions before exposing sensitive user information.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/ameqhwg64zeakr9/wZ0.dyZuRC_9.in
+Path: data/ameqhwg64zeakr9/wZ0.dyZuRC_9.in
+Vulnerability: Hardcoded Secrets
+Code line: None
+Relevant code:
+"IvhKY.9,*"
+Description: The source code contains hardcoded secrets which can be exploited by an attacker to gain unauthorized access.
+Severity: High
+Fix: Remove hardcoded secrets from the source code and use secure environment variables or a secure vault for storing secrets.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/ameqhwg64zeakr9/wZ0.dyZuRC_9.in
+Path: data/ameqhwg64zeakr9/wZ0.dyZuRC_9.in
+Vulnerability: Insecure Data Storage
+Code line: None
+Relevant code:
+"IvhKY.9,*"
+Description: The source code seems to store data in an insecure manner which can be exploited by an attacker to gain unauthorized access to sensitive data.
+Severity: High
+Fix: Implement proper encryption and access controls on stored data.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/ameqhwg64zeakr9/wZ0.dyZuRC_9.in
+Path: data/ameqhwg64zeakr9/wZ0.dyZuRC_9.in
+Vulnerability: Weak Cryptography
+Code line: None
+Relevant code:
+"IvhKY.9,*"
+Description: The source code seems to use weak or outdated cryptographic algorithms which can be exploited by an attacker to decrypt sensitive data.
+Severity: High
+Fix: Use strong and updated cryptographic algorithms for encryption and hashing.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/ameqhwg64zeakr9/bx.DqBHHhDVY.out
+Path: data/ameqhwg64zeakr9/bx.DqBHHhDVY.out
+Vulnerability: Hardcoded Secrets
+Code line: None
+Relevant code:
+tfigXLDqNH
+Description: The source code contains hardcoded secrets which can be exploited by an attacker to gain unauthorized access to the system.
+Severity: High
+Fix: Remove the hardcoded secrets from the source code and use a secure method to store them, such as environment variables or a secure vault.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/fv8oqbwj9nwcm8c/main.sus
+Path: data/fv8oqbwj9nwcm8c/main.sus
+Vulnerability: Hardcoded Secrets
+Code line: None
+Relevant code:
+RED HAVE YOU SEEN THIS
+
+WHILE ITS NOT RED VOTE ME
+
+BLOCKUS
+
+	CHAR WHO ARE YOU
+
+	CHAR CAN VOUCH GO AND TELL THEM COME ON
+
+	RED HAVE YOU SEEN THIS
+
+ENDBLOCKUS
+Description: The source code contains hardcoded values that could potentially be sensitive information. Hardcoding secrets in the code can lead to exposure of sensitive data or resources.
+Severity: High
+Fix: Remove hardcoded values from the source code. Use environment variables or secure configuration files to store sensitive information.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/uxhg4fxjmtq81bj/main.sus
+Path: data/uxhg4fxjmtq81bj/main.sus
+Vulnerability: Hardcoded Secrets
+Code line: None
+Relevant code:
+RED HAVE YOU SEEN THIS
+
+WHILE ITS NOT RED VOTE ME
+
+BLOCKUS
+
+	CHAR WHO ARE YOU
+
+	CHAR CAN VOUCH GO AND TELL THEM COME ON
+
+	RED HAVE YOU SEEN THIS
+
+ENDBLOCKUS
+Description: The source code contains hardcoded information that could potentially be sensitive. This is a security risk as it exposes potentially sensitive data to unauthorized users.
+Severity: High
+Fix: Remove hardcoded information from the source code. Use environment variables or secure storage solutions to store sensitive information.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/op1iylmpcejyky3/main.sus
+Path: data/op1iylmpcejyky3/main.sus
+Vulnerability: Broken Authentication
+Code line: None
+Relevant code:
+m2zeYKVKAzX6C CAN VOUCH GO AND TELL THEM COME ON
+
+Ba2xlYC9uGiD5 CAN VOUCH GO AND TELL THEM COME ON
+Description: The code seems to allow users to vouch for others without any form of authentication or verification. This could allow unauthorized users to gain access.
+Severity: High
+Fix: Implement a proper authentication system where users are required to verify their identity before they can vouch for others.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/op1iylmpcejyky3/main.sus
+Path: data/op1iylmpcejyky3/main.sus
+Vulnerability: Insecure Direct Object References (IDOR)
+Code line: None
+Relevant code:
+bE4GDLYuZVWMl HAS JOINED THE fp-bT9YEAOhx.out
+Description: The code directly references an object (fp-bT9YEAOhx.out) without any form of access control. This could allow unauthorized users to access and manipulate the object.
+Severity: High
+Fix: Implement proper access controls to ensure that only authorized users can access and manipulate objects.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/op1iylmpcejyky3/main.sus
+Path: data/op1iylmpcejyky3/main.sus
+Vulnerability: Broken Access Control
+Code line: None
+Relevant code:
+kPte408tAEikr HAS LEFT THE QM-xUjus3q_7.in
+Description: The code allows users to leave a session (QM-xUjus3q_7.in) without any form of access control. This could allow unauthorized users to leave sessions they should not have access to.
+Severity: Medium
+Fix: Implement proper access controls to ensure that only authorized users can leave sessions.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/op1iylmpcejyky3/main.sus
+Path: data/op1iylmpcejyky3/main.sus
+Vulnerability: Injection Attacks
+Code line: None
+Relevant code:
+kPte408tAEikr GOES UP BY 10
+
+kPte408tAEikr GOES DOWN BY 123
+
+kPte408tAEikr GOES UP BY 112
+
+kPte408tAEikr GOES DOWN BY 255
+Description: The code allows for the manipulation of a user's score (kPte408tAEikr) without any form of input sanitization. This could allow for injection attacks where malicious users manipulate their scores.
+Severity: High
+Fix: Implement input sanitization to ensure that only valid inputs are accepted when manipulating scores.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/op1iylmpcejyky3/QM-xUjus3q_7.in
+Path: data/op1iylmpcejyky3/QM-xUjus3q_7.in
+Vulnerability: Hardcoded Secrets
+Code line: None
+Relevant code:
+u<Tn@7if	
+Description: The source code contains hardcoded secrets which can be exploited by an attacker to gain unauthorized access.
+Severity: High
+Fix: Remove hardcoded secrets from the source code. Use environment variables or secure vault services to store sensitive information.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/op1iylmpcejyky3/QM-xUjus3q_7.in
+Path: data/op1iylmpcejyky3/QM-xUjus3q_7.in
+Vulnerability: Weak Cryptography
+Code line: None
+Relevant code:
+u<Tn@7if	
+Description: The source code uses weak or outdated cryptographic algorithms which can be easily broken by an attacker.
+Severity: High
+Fix: Replace the weak cryptographic algorithm with a stronger, up-to-date one. Consider using a well-tested cryptographic library instead of implementing your own.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/op1iylmpcejyky3/QM-xUjus3q_7.in
+Path: data/op1iylmpcejyky3/QM-xUjus3q_7.in
+Vulnerability: Insecure Data Storage
+Code line: None
+Relevant code:
+u<Tn@7if	
+Description: The source code does not properly protect stored data, making it vulnerable to unauthorized access.
+Severity: High
+Fix: Implement proper encryption and access controls on stored data. Consider using a secure data storage solution.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/op1iylmpcejyky3/fp-bT9YEAOhx.out
+Path: data/op1iylmpcejyky3/fp-bT9YEAOhx.out
+Vulnerability: Hardcoded Secrets
+Code line: None
+Relevant code:
+UYAWDOhVFA
+Description: The source code contains hardcoded secrets which can be exploited by malicious actors to gain unauthorized access to the system.
+Severity: High
+Fix: Remove hardcoded secrets from the source code. Use environment variables or secure vaults to store sensitive information.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/z47sxrqmqpqr2av/main.sus
+Path: data/z47sxrqmqpqr2av/main.sus
+Vulnerability: Hardcoded Secrets
+Code line: None
+Relevant code:
+RED HAVE YOU SEEN THIS
+
+WHILE ITS NOT RED VOTE ME
+
+BLOCKUS
+
+	CHAR WHO ARE YOU
+
+	CHAR CAN VOUCH GO AND TELL THEM COME ON
+
+	RED HAVE YOU SEEN THIS
+
+ENDBLOCKUS
+Description: The source code contains hardcoded values that could potentially be sensitive information. Hardcoding secrets in the code can lead to exposure of sensitive data when the source code is leaked.
+Severity: High
+Fix: Remove hardcoded values from the source code. Use environment variables or secure configuration files to store sensitive information.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/nlozw4rokx4xq6d/main.sus
+Path: data/nlozw4rokx4xq6d/main.sus
+Vulnerability: Insecure Data Storage
+Code line: None
+Relevant code:
+yxSU74M3sobPS GOES UP BY 112
+
+yxSU74M3sobPS GOES DOWN BY 255
+Description: The application is storing data in an insecure manner. The data is being manipulated without any checks or validations.
+Severity: High
+Fix: Implement proper data validation and checks before manipulating the data. Use secure methods for data storage.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/nlozw4rokx4xq6d/main.sus
+Path: data/nlozw4rokx4xq6d/main.sus
+Vulnerability: Broken Authentication
+Code line: None
+Relevant code:
+JW1w7x_414Ukk HAS JOINED THE RH3hJKvoajj9.out
+Description: The application seems to allow users to join without proper authentication or session management.
+Severity: Critical
+Fix: Implement proper authentication and session management. Ensure users are authenticated before they can join.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/nlozw4rokx4xq6d/main.sus
+Path: data/nlozw4rokx4xq6d/main.sus
+Vulnerability: Broken Access Control
+Code line: None
+Relevant code:
+yxSU74M3sobPS HAS LEFT THE 6GQh-3Vk8uoh.in
+Description: The application seems to allow users to leave without proper access control or session management.
+Severity: High
+Fix: Implement proper access control and session management. Ensure users have the necessary permissions before they can leave.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/nlozw4rokx4xq6d/main.sus
+Path: data/nlozw4rokx4xq6d/main.sus
+Vulnerability: Insufficient Logging and Monitoring
+Code line: None
+Relevant code:
+JZBrm4Nih97Xs WAS THE IMPOSTOR
+Description: The application does not seem to have adequate logging and monitoring. Actions such as identifying an impostor should be logged and monitored.
+Severity: Medium
+Fix: Implement proper logging and monitoring. Log all user actions and regularly monitor the logs for any suspicious activity.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/nlozw4rokx4xq6d/main.sus
+Path: data/nlozw4rokx4xq6d/main.sus
+Vulnerability: Information Leakage
+Code line: None
+Relevant code:
+FocdrOAC7SVjn HAVE YOU SEEN THIS
+Description: The application seems to be leaking information. User interactions should not be exposed without proper access control.
+Severity: Medium
+Fix: Implement proper access control. Ensure user interactions are not exposed to unauthorized users.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/nlozw4rokx4xq6d/6GQh-3Vk8uoh.in
+Path: data/nlozw4rokx4xq6d/6GQh-3Vk8uoh.in
+Vulnerability: Hardcoded Secrets
+Code line: None
+Relevant code:
+dFx\f2u"]|d
+Description: The source code contains hardcoded secrets which can be exploited by an attacker to gain unauthorized access to the system.
+Severity: High
+Fix: Remove hardcoded secrets from the source code. Use environment variables or secure vaults to store sensitive information.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/nlozw4rokx4xq6d/6GQh-3Vk8uoh.in
+Path: data/nlozw4rokx4xq6d/6GQh-3Vk8uoh.in
+Vulnerability: Insecure Data Storage
+Code line: None
+Relevant code:
+dFx\f2u"]|d
+Description: The source code suggests that data is being stored insecurely. This can lead to unauthorized access and manipulation of data.
+Severity: High
+Fix: Ensure that all data is stored securely, using encryption where necessary. Implement proper access controls to prevent unauthorized access to stored data.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/nlozw4rokx4xq6d/6GQh-3Vk8uoh.in
+Path: data/nlozw4rokx4xq6d/6GQh-3Vk8uoh.in
+Vulnerability: Weak Cryptography
+Code line: None
+Relevant code:
+dFx\f2u"]|d
+Description: The source code suggests the use of weak or outdated cryptographic algorithms. This can lead to unauthorized decryption of sensitive data.
+Severity: High
+Fix: Replace weak or outdated cryptographic algorithms with strong, up-to-date ones. Ensure that all encryption, hashing, etc. is done using secure methods.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/nlozw4rokx4xq6d/RH3hJKvoajj9.out
+Path: data/nlozw4rokx4xq6d/RH3hJKvoajj9.out
+Vulnerability: Hardcoded Secrets
+Code line: None
+Relevant code:
+jdPULycjUR
+Description: The source code contains hardcoded secrets which can be exploited by malicious users to gain unauthorized access to the system.
+Severity: High
+Fix: Remove hardcoded secrets from the source code. Use environment variables or secure vaults to store sensitive information.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/qnvsvvs88yt3o8j/main.sus
+Path: data/qnvsvvs88yt3o8j/main.sus
+Vulnerability: None
+Code line: None
+Relevant code:
+None
+Description: None
+Severity: None
+Fix: NoneDirect code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/8cb433n9a4sinul/main.sus
+Path: data/8cb433n9a4sinul/main.sus
+Vulnerability: Hardcoded Secrets
+Code line: None
+Relevant code:
+A4T0JB5QXWC3J1HLT15WME7IE0PPTTX=
+Description: The source code contains a hardcoded secret which can be exploited by an attacker if the source code is leaked.
+Severity: High
+Fix: Replace the hardcoded secret with a secure method of storing secrets, such as environment variables or a secure vault.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/pb8dy7b3gnxe6mz/main.sus
+Path: data/pb8dy7b3gnxe6mz/main.sus
+Vulnerability: Insecure Data Storage
+Code line: None
+Relevant code:
+H_jX1HGFhuGSi GOES DOWN BY 255
+Description: The application does not properly protect sensitive data from unauthorized access.
+Severity: High
+Fix: Implement proper access controls and encryption for sensitive data.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/pb8dy7b3gnxe6mz/main.sus
+Path: data/pb8dy7b3gnxe6mz/main.sus
+Vulnerability: Broken Access Control
+Code line: None
+Relevant code:
+s_u7LKith4A6g HAS JOINED THE 8b2Jv4oCJd.t.out
+Description: The application does not properly enforce access controls, allowing users to perform unauthorized actions.
+Severity: High
+Fix: Implement proper role-based access controls and verify them before allowing access to resources.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/pb8dy7b3gnxe6mz/main.sus
+Path: data/pb8dy7b3gnxe6mz/main.sus
+Vulnerability: Information Leakage
+Code line: None
+Relevant code:
+IS QWgZxzej12Oe.in EMPTY jsl5oqHLrJFAS TELL ME PLS PLS PLS
+Description: The application exposes sensitive information, potentially allowing unauthorized access to data.
+Severity: Medium
+Fix: Ensure that error messages and other outputs do not expose sensitive information.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/pb8dy7b3gnxe6mz/main.sus
+Path: data/pb8dy7b3gnxe6mz/main.sus
+Vulnerability: Uncontrolled Resource Consumption
+Code line: None
+Relevant code:
+tYIs5BVCJ87uo GOES UP BY 10
+Description: The application does not properly manage resources, potentially leading to a denial of service.
+Severity: Medium
+Fix: Implement proper rate limiting and resource management to prevent resource exhaustion.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/pb8dy7b3gnxe6mz/main.sus
+Path: data/pb8dy7b3gnxe6mz/main.sus
+Vulnerability: Broken Authentication
+Code line: None
+Relevant code:
+k5LvSFIJ08w3C WAS THE IMPOSTOR
+Description: The application does not properly implement authentication, potentially allowing unauthorized access.
+Severity: High
+Fix: Implement proper authentication mechanisms, including strong passwords and session management.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/pb8dy7b3gnxe6mz/QWgZxzej12Oe.in
+Path: data/pb8dy7b3gnxe6mz/QWgZxzej12Oe.in
+Vulnerability: Hardcoded Secrets
+Code line: None
+Relevant code:
+pp3c5uO&vM
+Description: Credentials or secrets in code; Check source code for hardcoded passwords, API keys, etc.
+Severity: High
+Fix: Replace hardcoded secrets with environment variables or secure secret management system.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/pb8dy7b3gnxe6mz/QWgZxzej12Oe.in
+Path: data/pb8dy7b3gnxe6mz/QWgZxzej12Oe.in
+Vulnerability: Insecure Data Storage
+Code line: None
+Relevant code:
+pp3c5uO&vM
+Description: Inadequate protection of stored data; Check for proper encryption and access controls on stored data.
+Severity: High
+Fix: Implement proper encryption and access controls on stored data.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/pb8dy7b3gnxe6mz/QWgZxzej12Oe.in
+Path: data/pb8dy7b3gnxe6mz/QWgZxzej12Oe.in
+Vulnerability: Weak Cryptography
+Code line: None
+Relevant code:
+pp3c5uO&vM
+Description: Using weak or outdated cryptographic algorithms; Verify algorithms used for encryption, hashing, etc.
+Severity: Medium
+Fix: Use strong and updated cryptographic algorithms for encryption and hashing.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/pb8dy7b3gnxe6mz/QWgZxzej12Oe.in
+Path: data/pb8dy7b3gnxe6mz/QWgZxzej12Oe.in
+Vulnerability: Information Leakage
+Code line: None
+Relevant code:
+pp3c5uO&vM
+Description: Exposing sensitive information in errors, etc.; Check for detailed error messages, stack traces, etc.
+Severity: Medium
+Fix: Avoid exposing sensitive information in errors and stack traces.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/pb8dy7b3gnxe6mz/8b2Jv4oCJd.t.out
+Path: data/pb8dy7b3gnxe6mz/8b2Jv4oCJd.t.out
+Vulnerability: Hardcoded Secrets
+Code line: None
+Relevant code:
+yNwOdWVQdA
+Description: Credentials or secrets in code; Check source code for hardcoded passwords, API keys, etc.
+Severity: High
+Fix: Remove hardcoded secrets from the source code and use secure methods such as environment variables or secure vaults to store sensitive information.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/8jrouahsoxm7nfp/main.sus
+Path: data/8jrouahsoxm7nfp/main.sus
+Vulnerability: Injection Attacks
+Code line: None
+Relevant code:
+amDVVaOoj_T5b GOES UP BY 112
+
+    amDVVaOoj_T5b GOES DOWN BY 255
+Description: Untrusted data sent to an interpreter; Look for unsanitized input in SQL queries, OS commands, etc.
+Severity: High
+Fix: Sanitize and validate all user inputs before processing.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/8jrouahsoxm7nfp/main.sus
+Path: data/8jrouahsoxm7nfp/main.sus
+Vulnerability: Broken Authentication
+Code line: None
+Relevant code:
+UuyFDXZ4pR3_C HAVE YOU SEEN THIS
+
+WHILE ITS NOT UuyFDXZ4pR3_C VOTE ME
+Description: Incomplete or incorrect implementation of authentication; Check for weak passwords, session management, etc.
+Severity: High
+Fix: Implement strong password policies and secure session management.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/8jrouahsoxm7nfp/main.sus
+Path: data/8jrouahsoxm7nfp/main.sus
+Vulnerability: Sensitive Data Exposure
+Code line: None
+Relevant code:
+IS 1CXU-yuegqI1.in EMPTY VXqjix_UKwopW TELL ME PLS PLS PLS
+Description: Unprotected sensitive information; Look for weak encryption, exposed API keys, etc.
+Severity: Medium
+Fix: Encrypt sensitive data and avoid exposing sensitive information.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/8jrouahsoxm7nfp/main.sus
+Path: data/8jrouahsoxm7nfp/main.sus
+Vulnerability: Cross-Site Scripting (XSS)
+Code line: None
+Relevant code:
+xS8W9jFj2AcQH WHO ARE YOU
+
+    xS8W9jFj2AcQH HAS JOINED THE ZooR_B7N0_zA.out
+Description: Untrusted data inserted into HTML; Look for unsanitized user input in HTML content.
+Severity: Medium
+Fix: Sanitize and validate all user inputs before inserting into HTML content.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/8jrouahsoxm7nfp/main.sus
+Path: data/8jrouahsoxm7nfp/main.sus
+Vulnerability: Broken Access Control
+Code line: None
+Relevant code:
+amDVVaOoj_T5b HAS LEFT THE 1CXU-yuegqI1.in
+Description: Users able to perform unauthorized actions; Verify role-based access controls, direct object references, etc.
+Severity: High
+Fix: Implement role-based access controls and validate direct object references.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/data/8jrouahsoxm7nfp/ZooR_B7N0_zA.out
+Path: data/8jrouahsoxm7nfp/ZooR_B7N0_zA.out
+Vulnerability: Hardcoded Secrets
+Code line: None
+Relevant code:
+IUXTHfpCWl
+Description: The source code contains hardcoded secrets which can be exploited by malicious actors to gain unauthorized access to the system.
+Severity: High
+Fix: Remove the hardcoded secrets from the source code and use secure methods such as environment variables or secure vaults to store sensitive information.Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/server/workspaceUtils.js
+Path: web/src/lib/server/workspaceUtils.js
+Vulnerability: Path Traversal Attack
+Relevant code:
+const workspaceDir = path.join(WORKSPACE_DATA_DIR, workspaceId);
+Description: The application may be vulnerable to path traversal attacks. The workspaceId parameter is used in file paths without proper sanitization, potentially allowing an attacker to access files and directories outside the intended directory.
+Severity: High
+Fix: Sanitize the workspaceId parameter before using it in file paths. Consider using a library or built-in function to ensure only valid characters are used.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/server/workspaceUtils.js
+Path: web/src/lib/server/workspaceUtils.js
+Vulnerability: Insecure Data Storage
+Relevant code:
+fs.writeFileSync(filePath, content);
+Description: The application writes data to a file without proper access controls or encryption. This could allow unauthorized access to sensitive data.
+Severity: Medium
+Fix: Implement proper access controls for files and directories. Consider encrypting sensitive data before writing it to a file.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/server/workspaceUtils.js
+Path: web/src/lib/server/workspaceUtils.js
+Vulnerability: Insecure Data Storage
+Relevant code:
+fs.readFileSync(filePath);
+Description: The application reads data from a file without proper access controls or encryption. This could allow unauthorized access to sensitive data.
+Severity: Medium
+Fix: Implement proper access controls for files and directories. Consider encrypting sensitive data when storing it and decrypting it when reading.
+
+Direct code link: /Users/dmitry/projects/ctf-training/amogus_plus_plus/web/src/lib/server/workspaceUtils.js
+Path: web/src/lib/server/workspaceUtils.js
+Vulnerability: Broken Access Control
+Relevant code:
+fs.rmdirSync(workspaceDir, { recursive: true });
+Description: The application deletes a directory and all of its contents without checking if the user has the necessary permissions. This could allow an attacker to delete data they should not have access to.
+Severity: High
+Fix: Implement proper access controls and check if the user has the necessary permissions before deleting a directory.
