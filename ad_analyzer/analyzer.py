@@ -57,6 +57,7 @@ def list_service_directory(service_root: str, debug: bool = False) -> Tuple[List
                 'LICENSE',
                 'README.md',
                 'package-lock.json',
+                '.prettierrc',
             ])
             IGNORE_FILENAMES_PREFIXES = [
                 '.git',
@@ -150,7 +151,7 @@ def analyze_vulnerability(service_root: str, output: TextIO, debug=False) -> Lis
         output.write(
             '\n\n'.join(
                 str(file_vulnerability)
-                for file_vulnerability in vulnerabilities
+                for file_vulnerability in file_vulnerabilities
             )
         )
         output.flush()
