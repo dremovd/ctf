@@ -1,25 +1,31 @@
 from typing import Dict
+import os
 
 __all__ = ['Vulnerability', 'Directory', 'File']
 
 class Vulnerability(object):
-    def __init__(self, path: str, line: int, relevant_code:str, name: str, description: str, possible_fix: str) -> None:
-        self.name = name
-        self.description = description
+    def __init__(self, root:str, path: str, line: int=None, relevant_code : str=None, name: str=None, description: str=None, severity: str=None, code_fix: str=None) -> None:
         self.path = path
         self.line = line
         self.relevant_code = relevant_code
-        self.possible_fix = possible_fix
+        self.name = name
+        self.description = description
+        self.severity = severity
+        self.code_fix = code_fix
+        self.root = root
 
     def __str__(self) -> str:
-        return '\n'.join([
+        lines = [
+            f'Direct code link: {os.path.join(self.root, self.path)}',
             f'Path: {self.path}',
             f'Vulnerability: {self.name}',
-            f'Code line: {self.name}',
-            f'Relevant code: {self.name}',
+            f'Code line: {self.line}',
+            f'Relevant code:\n{self.relevant_code}',
             f'Description: {self.description}',
-            f'Possible fix: {self.possible_fix}',
-        ])
+            f'Severity: {self.severity}',
+            f'Fix: {self.code_fix}',
+        ]
+        return '\n'.join(line for line in lines if line is not None)
 
 class Directory(object):
     def __init__(self, path: str, files_count: int, subdirectories_count: int) -> None:
@@ -38,7 +44,8 @@ class Directory(object):
         }
     
 class File(object):
-    def __init__(self, path: str, lines_count: int, extension: str, is_binary: bool) -> None:
+    def __init__(self, root:str, path: str, lines_count: int, extension: str, is_binary: bool) -> None:
+        self.root = root
         self.path = path
         self.lines_count = lines_count
         self.extension = extension
