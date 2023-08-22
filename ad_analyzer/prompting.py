@@ -233,16 +233,21 @@ def chagpt_analyze(file_description: File, code: str, project_structure: List[Fi
     vulnerabilities_dict = json.loads(response)
     vulnerabilities = []
     for vulnerability_dict in vulnerabilities_dict:
-        vulnerability = Vulnerability(
-            root=file_description.root,
-            path=file_description.path,
-            line=None,
-            relevant_code=vulnerability_dict.get('relevant_code', None),
-            name=vulnerability_dict.get('name', None),
-            description=vulnerability_dict.get('description', None),
-            severity=vulnerability_dict.get('severity', None),
-            code_fix=vulnerability_dict.get('code_fix', None),
-        )
+        try:
+            vulnerability = Vulnerability(
+                root=file_description.root,
+                path=file_description.path,
+                line=None,
+                relevant_code=vulnerability_dict.get('relevant_code', None),
+                name=vulnerability_dict.get('name', None),
+                description=vulnerability_dict.get('description', None),
+                severity=vulnerability_dict.get('severity', None),
+                code_fix=vulnerability_dict.get('code_fix', None),
+            )
+        except AttributeError:
+            print(f'RESPONSE FORMAT ERROR:\n{vulnerability_dict}')
+            raise
+
         vulnerabilities.append(vulnerability)
     return vulnerabilities
 
