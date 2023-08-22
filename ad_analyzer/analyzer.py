@@ -1,6 +1,8 @@
 from typing import List, Tuple, TextIO
 import os
 from tqdm.auto import tqdm
+import pickle
+import hashlib
 
 from prompting import chagpt_analyze
 from description import Vulnerability, File, Directory
@@ -123,7 +125,23 @@ def analyze_file(service_root: str, file_description: File, project_structure: L
 def analyze_vulnerability(service_root: str, output: TextIO, debug=False) -> List[Tuple[File, Vulnerability]]:
     directories, files, project_structure = list_service_directory(service_root, debug=debug)
     vulnerabilities = []
+    
+    # Read state file to get already analyzed files
+    analyzed_files = []
+    # Create a unique identifier for the service_root
+    service_root_hash = hashlib.sha256(service_root.encode()).hexdigest()
+    state_file = f'analyzed_files_{service_root_hash}.pickle'
+    
+    try:
+        with open(state_file, 'rb') as state_f:
+            analyzed_files, vulnerabilities = pickle.load(state_f)
+    except FileNotFoundError:
+        pass
+
     for file_description in tqdm(files):
+        if file_description.path in [analyzed_file.path for analyzed_file in analyzed_files]:
+            continue
+
         file_vulnerabilities = analyze_file(service_root, file_description, directories, debug=debug)
         for file_vulnerability in file_vulnerabilities:
             print(file_vulnerability)
@@ -139,8 +157,14 @@ def analyze_vulnerability(service_root: str, output: TextIO, debug=False) -> Lis
 
         vulnerabilities.extend(file_vulnerabilities)
 
+        # Update state file with the analyzed file
+        analyzed_files.append(file_description)
+        with open(state_file, 'wb') as state_f:
+            pickle.dump([analyzed_files, vulnerabilities], state_f, fix_imports=True)
+
     return vulnerabilities
 
 if __name__ == '__main__':
-    with open('vulnerabilities.txt', 'w') as output:
+    output_file = f'vulnerabilities_{hashlib.sha256(SERVICE_ROOT.encode()).hexdigest()}.txt'
+    with open(output_file, 'a') as output:
         vulnerabilities = analyze_vulnerability(SERVICE_ROOT, output, debug=False)

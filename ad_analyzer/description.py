@@ -26,6 +26,18 @@ class Vulnerability(object):
             f'Fix: {self.code_fix}',
         ]
         return '\n'.join(line for line in lines if line is not None)
+    
+    def as_dict(self) -> Dict:
+        return {
+            'path': self.path,
+            'line': self.line,
+            'relevant_code': self.relevant_code,
+            'name': self.name,
+            'description': self.description,
+            'severity': self.severity,
+            'code_fix': self.code_fix,
+            'root': self.root,
+        }
 
 class Directory(object):
     def __init__(self, path: str, files_count: int, subdirectories_count: int) -> None:
