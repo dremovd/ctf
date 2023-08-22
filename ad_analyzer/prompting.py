@@ -194,6 +194,8 @@ checklist = """
     Sensitive Data Exposure - Unprotected sensitive information; Look for weak encryption, exposed API keys, etc.
     Cross-Site Scripting (XSS) - Untrusted data inserted into HTML; Look for unsanitized user input in HTML content.
     Broken Access Control - Users able to perform unauthorized actions; Verify role-based access controls, direct object references, etc.
+    HTTP Verb Tampering - Exploiting alternative HTTP methods; Check for proper handling and filtering of HTTP methods like POST, PUT, DELETE.
+    Parameter Tampering - Manipulation of parameters in URL, cookies, request body; Look for improper validation of parameters and strict method handling.
     Security Misconfiguration - Default, incomplete, or ad-hoc configurations; Check for unnecessary services, default credentials, etc.
     Using Components with Known Vulnerabilities - Using outdated libraries; Check versions of third-party components and libraries.
     Insecure Deserialization - Untrusted data affecting object creation; Check serialization methods, object creation, etc.

@@ -379,3 +379,110 @@ Fix: Implement a timeout for mutex locks to prevent them from being held for too
 
 FILE END
 
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/main.go
+Path: training/main.go
+Vulnerability: Password Management Weaknesses
+Relevant code:
+u := DBUser{
+
+        User:      data["user"],
+
+        Password:  data["password"],
+
+        Flag:      data["flag"],
+
+        Timestamp: time.Now().Unix(),
+
+    }
+Description: Passwords are stored in plain text which can be easily read if the database is compromised.
+Severity: High
+Fix: Use a strong cryptographic hash function to store passwords. Do not store passwords in plain text.
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/main.go
+Path: training/main.go
+Vulnerability: Sensitive Data Exposure
+Relevant code:
+cookieStr, signatureStr, err := signCookie(cookie)
+
+        if err != nil {
+
+            c.HTML(http.StatusOK, template, gin.H{"Error": err.Error()})
+
+            return
+
+        }
+
+
+
+        c.SetCookie(cookieName, cookieStr, cookieTTL, "/", cookieDomain(c), false, true)
+
+        c.SetCookie(cookieSigName, signatureStr, cookieTTL, "/", cookieDomain(c), false, true)
+Description: Cookies are not set with the Secure flag, which can expose them to potential interception over unencrypted connections.
+Severity: Medium
+Fix: Set the Secure flag for cookies to ensure they are only sent over HTTPS.
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/main.go
+Path: training/main.go
+Vulnerability: Broken Authentication
+Relevant code:
+mu.Lock()
+
+    defer mu.Unlock()
+
+
+
+    user, ok := users[data["user"]]
+
+    if !ok {
+
+        return errors.New("no such user")
+
+    }
+
+
+
+    if user.Password != data["password"] {
+
+        return errors.New("wrong password")
+
+    }
+Description: The application is using a simple comparison for password checking. This can lead to timing attacks.
+Severity: Medium
+Fix: Use a constant-time comparison function for password checking to prevent timing attacks.
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/main.go
+Path: training/main.go
+Vulnerability: Using Components with Known Vulnerabilities
+Relevant code:
+"github.com/gin-gonic/gin"
+Description: The application is using third-party libraries. If these libraries have known vulnerabilities and are not updated regularly, they can expose the application to attacks.
+Severity: Medium
+Fix: Regularly update all third-party libraries to their latest versions to benefit from security patches.
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/main.go
+Path: training/main.go
+Vulnerability: Weak Cryptography
+Relevant code:
+if len(u.User) < 4 || len(u.User) > 20 {
+
+        return errors.New("invalid user name")
+
+    }
+
+    if len(u.Password) < 4 || len(u.Password) > 20 {
+
+        return errors.New("invalid password")
+
+    }
+
+    if len(u.Flag) < 4 || len(u.Flag) > 40 {
+
+        return errors.New("invalid flag")
+
+    }
+Description: The application has weak password policies. This can allow attackers to use brute force attacks to guess passwords.
+Severity: High
+Fix: Implement a strong password policy. Require passwords to be a certain length and include a mix of letters, numbers, and special characters.
+
+FILE END
+
