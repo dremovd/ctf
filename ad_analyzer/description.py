@@ -25,7 +25,7 @@ class Vulnerability(object):
             f'Severity: {self.severity}',
             f'Fix: {self.code_fix}',
         ]
-        return '\n'.join(line for line in lines if line is not None)
+        return '\n'.join(line for line in lines if not line.endswith('None'))
     
     def as_dict(self) -> Dict:
         return {
