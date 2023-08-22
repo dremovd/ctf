@@ -26,6 +26,7 @@ MODEL_PRICES = {
     "output_token": 0.001 * 0.06,
 }
 RATE_LIMIT_DELAY = 20
+UNAVAILABLE_LIMIT_DELAY = 10
 
 def normalize_output(text):
     paragraphs = text.split('\n')
@@ -147,6 +148,9 @@ def simple_completion(dict_input: Dict, system_prompt: str, debug: bool=False, n
         except openai.error.RateLimitError as e:
             print(f"RateLimitError occurred. Retrying in {RATE_LIMIT_DELAY} seconds...")
             time.sleep(RATE_LIMIT_DELAY)
+        except openai.error.ServiceUnavailableError:
+            print(f"ServiceUnavailableError occurred. Retrying in {UNAVAILABLE_LIMIT_DELAY} seconds...")
+            time.sleep(UNAVAILABLE_LIMIT_DELAY)            
         except openai.error.APIError as e:
             if e.args[0] == 502 and 'Bad gateway.' in str(e):
                 if debug:
