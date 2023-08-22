@@ -1,0 +1,381 @@
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/index.tpl
+Path: training/index.tpl
+Vulnerability: Broken Authentication
+Relevant code:
+<form action="/" method="POST">
+<input type="text" name="user" maxlength="20" placeholder="required" autofocus/>
+<input type="password" name="password" maxlength="20" placeholder="required"/>
+<input type="text" name="flag" size="80" maxlength="64" placeholder="only for register"/>
+<input type="submit" name="login"    value="Login" />
+<input type="submit" name="register" value="Register" />
+Description: The form does not implement any form of captcha or multi-factor authentication, making it susceptible to brute force attacks.
+Severity: High
+Fix: Implement a captcha or multi-factor authentication to prevent brute force attacks.
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/index.tpl
+Path: training/index.tpl
+Vulnerability: Sensitive Data Exposure
+Relevant code:
+<form action="/logout" method="POST">
+<b>{{ .User.User }}</b>
+<b>{{ .User.Flag }}</b>
+<input type="submit" name="logout" value="Logout" />
+Description: The user's flag is being displayed on the page. This could potentially expose sensitive information.
+Severity: High
+Fix: Remove the user's flag from being displayed on the page.
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/index.tpl
+Path: training/index.tpl
+Vulnerability: Password Management Weaknesses
+Relevant code:
+<form action="/" method="POST">
+<input type="text" name="user" maxlength="20" placeholder="required" autofocus/>
+<input type="password" name="password" maxlength="20" placeholder="required"/>
+Description: The password input field does not have any complexity requirements, allowing for weak passwords.
+Severity: Medium
+Fix: Implement password complexity requirements such as a minimum length, and the inclusion of uppercase letters, lowercase letters, numbers, and special characters.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/go.mod
+Path: training/go.mod
+Vulnerability: Using Components with Known Vulnerabilities
+Relevant code:
+require github.com/gin-gonic/gin v1.9.1
+Description: The project is using an outdated version of the 'github.com/gin-gonic/gin' library. This can expose the application to vulnerabilities that have been fixed in more recent versions.
+Severity: High
+Fix: Update 'github.com/gin-gonic/gin' to the latest stable version.
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/go.mod
+Path: training/go.mod
+Vulnerability: Using Components with Known Vulnerabilities
+Relevant code:
+require golang.org/x/crypto v0.9.0
+Description: The project is using an outdated version of the 'golang.org/x/crypto' library. This can expose the application to vulnerabilities that have been fixed in more recent versions.
+Severity: High
+Fix: Update 'golang.org/x/crypto' to the latest stable version.
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/go.mod
+Path: training/go.mod
+Vulnerability: Using Components with Known Vulnerabilities
+Relevant code:
+require github.com/go-playground/validator/v10 v10.14.0
+Description: The project is using an outdated version of the 'github.com/go-playground/validator/v10' library. This can expose the application to vulnerabilities that have been fixed in more recent versions.
+Severity: Medium
+Fix: Update 'github.com/go-playground/validator/v10' to the latest stable version.
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/go.mod
+Path: training/go.mod
+Vulnerability: Using Components with Known Vulnerabilities
+Relevant code:
+require google.golang.org/protobuf v1.30.0
+Description: The project is using an outdated version of the 'google.golang.org/protobuf' library. This can expose the application to vulnerabilities that have been fixed in more recent versions.
+Severity: Medium
+Fix: Update 'google.golang.org/protobuf' to the latest stable version.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/.bashrc
+Path: training/.bashrc
+Vulnerability: Injection Attacks
+Relevant code:
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+Description: The alias command for 'alert' uses unsanitized input which can be exploited to execute arbitrary commands.
+Severity: High
+Fix: Use a command line argument parser or sanitization function to ensure that the input is safe before executing the command.
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/.bashrc
+Path: training/.bashrc
+Vulnerability: Path Traversal Attack
+Relevant code:
+if [ -f ~/.bash_aliases ]; then
+
+    . ~/.bash_aliases
+
+fi
+Description: The script sources the .bash_aliases file from the user's home directory without checking if it's a symbolic link. This can be exploited to execute arbitrary commands if an attacker can create a symbolic link to a malicious script in place of .bash_aliases.
+Severity: High
+Fix: Check if .bash_aliases is a symbolic link before sourcing it.
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/.bashrc
+Path: training/.bashrc
+Vulnerability: Using Components with Known Vulnerabilities
+Relevant code:
+if [ -f /usr/share/bash-completion/bash_completion ]; then
+
+    . /usr/share/bash-completion/bash_completion
+
+  elif [ -f /etc/bash_completion ]; then
+
+    . /etc/bash_completion
+
+  fi
+Description: The script sources bash_completion scripts without checking their versions. If these scripts have known vulnerabilities, they can be exploited.
+Severity: Medium
+Fix: Check the versions of bash_completion scripts and update them if necessary.
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/.bashrc
+Path: training/.bashrc
+Vulnerability: Information Leakage
+Relevant code:
+# colored GCC warnings and errors
+
+#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+Description: The commented out GCC_COLORS variable can expose detailed error messages if uncommented, which can provide useful information to an attacker.
+Severity: Low
+Fix: Remove the commented out GCC_COLORS variable or ensure that it doesn't expose detailed error messages.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/Dockerfile
+Path: training/Dockerfile
+Vulnerability: Hardcoded Secrets
+Relevant code:
+COPY rsa.go .
+Description: The rsa.go file is being copied into the Docker image. This file may contain sensitive information such as private keys.
+Severity: High
+Fix: Do not copy sensitive files into the Docker image. Instead, use environment variables or secure secret management systems to handle sensitive information.
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/Dockerfile
+Path: training/Dockerfile
+Vulnerability: Using Components with Known Vulnerabilities
+Relevant code:
+FROM golang:1.20.5
+Description: The Docker image is using an outdated version of Golang. This may expose the application to vulnerabilities that have been fixed in more recent versions.
+Severity: Medium
+Fix: Update the base Docker image to use the latest stable version of Golang.
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/Dockerfile
+Path: training/Dockerfile
+Vulnerability: Insecure Deserialization
+Relevant code:
+RUN go get .
+Description: The 'go get .' command fetches the dependencies of the project. If these dependencies are not properly validated, they could introduce insecure deserialization vulnerabilities.
+Severity: Medium
+Fix: Ensure that all dependencies fetched with 'go get .' are from trusted sources and are properly validated.
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/Dockerfile
+Path: training/Dockerfile
+Vulnerability: Security Misconfiguration
+Relevant code:
+CMD ["go", "run", "."]
+Description: The Docker image is configured to run the application with the 'go run .' command. This could lead to security misconfigurations as it does not provide a production-ready environment.
+Severity: Low
+Fix: Use a production-ready command to run the application, such as 'go build .' followed by executing the built binary.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/.bash_logout
+Path: training/.bash_logout
+Vulnerability: Injection Attacks - Untrusted data sent to an interpreter
+Relevant code:
+if [ "$SHLVL" = 1 ]; then
+
+    [ -x /usr/bin/clear_console ] && /usr/bin/clear_console -q
+
+fi
+
+Description: The code checks if the shell level (SHLVL) is 1 and then executes the clear_console command. This could potentially be exploited if an attacker can manipulate the SHLVL environment variable.
+Severity: Medium
+Fix: Validate the SHLVL environment variable before using it in a command. Consider using a whitelist of allowed values.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/rsa.go
+Path: training/rsa.go
+Vulnerability: Weak Cryptography
+Relevant code:
+key, err := rsa.GenerateKey(rand.Reader, keySize)
+Description: The RSA key size is set to 768 bits, which is considered weak. Modern standards recommend a minimum key size of 2048 bits for RSA.
+Severity: High
+Fix: Change the keySize constant to 2048 or higher.
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/rsa.go
+Path: training/rsa.go
+Vulnerability: Insecure Data Storage
+Relevant code:
+err = os.WriteFile(privateKeyFileName, bytes, 0644)
+Description: The private key file is being stored with permissions that allow other users on the same system to read the file. This could lead to unauthorized access to the private key.
+Severity: High
+Fix: Change the file permissions to 0600 to only allow the owner to read and write the file.
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/rsa.go
+Path: training/rsa.go
+Vulnerability: Hardcoded Secrets
+Relevant code:
+privateKeyFileName = "private.pem"
+Description: The filename for the private key is hardcoded into the application. This could make it easier for an attacker to locate and potentially exploit the private key.
+Severity: Medium
+Fix: Consider making the filename for the private key configurable, or storing it in a secure location.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/go.sum
+Path: training/go.sum
+Vulnerability: Using Components with Known Vulnerabilities
+Relevant code:
+github.com/gin-gonic/gin v1.9.1 h1:4idEAncQnU5cB7BeOkPtxjfCSye0AAm1R0RVIqJ+Jmg=
+Description: The project is using an outdated version of the gin-gonic/gin library. This can expose the project to vulnerabilities that have been fixed in more recent versions.
+Severity: High
+Fix: Update the gin-gonic/gin library to the latest stable version.
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/go.sum
+Path: training/go.sum
+Vulnerability: Using Components with Known Vulnerabilities
+Relevant code:
+github.com/go-playground/validator/v10 v10.14.0 h1:vgvQWe3XCz3gIeFDm/HnTIbj6UGmg/+t63MyGU2n5js=
+Description: The project is using an outdated version of the go-playground/validator library. This can expose the project to vulnerabilities that have been fixed in more recent versions.
+Severity: High
+Fix: Update the go-playground/validator library to the latest stable version.
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/go.sum
+Path: training/go.sum
+Vulnerability: Using Components with Known Vulnerabilities
+Relevant code:
+github.com/goccy/go-json v0.10.2 h1:CrxCmQqYDkv1z7lO7Wbh2HN93uovUHgrECaO5ZrCXAU=
+Description: The project is using an outdated version of the goccy/go-json library. This can expose the project to vulnerabilities that have been fixed in more recent versions.
+Severity: High
+Fix: Update the goccy/go-json library to the latest stable version.
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/go.sum
+Path: training/go.sum
+Vulnerability: Using Components with Known Vulnerabilities
+Relevant code:
+github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+Description: The project is using an outdated version of the davecgh/go-spew library. This can expose the project to vulnerabilities that have been fixed in more recent versions.
+Severity: High
+Fix: Update the davecgh/go-spew library to the latest stable version.
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/go.sum
+Path: training/go.sum
+Vulnerability: Using Components with Known Vulnerabilities
+Relevant code:
+github.com/ugorji/go/codec v1.2.11 h1:BMaWp1Bb6fHwEtbplGBGJ498wD+LKlNSl25MjdZY4dU=
+Description: The project is using an outdated version of the ugorji/go/codec library. This can expose the project to vulnerabilities that have been fixed in more recent versions.
+Severity: High
+Fix: Update the ugorji/go/codec library to the latest stable version.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/.profile
+Path: training/.profile
+Vulnerability: Security Misconfiguration
+Relevant code:
+#umask 022
+Description: The umask value is commented out, which could lead to files and directories being created with insecure permissions.
+Severity: Medium
+Fix: Uncomment the umask line to ensure files and directories are created with secure permissions.
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/.profile
+Path: training/.profile
+Vulnerability: Insecure Path Configuration
+Relevant code:
+if [ -d "$HOME/bin" ] ; then
+
+    PATH="$HOME/bin:$PATH"
+
+fi
+Description: The script adds user's private bin directory to the PATH. This could lead to execution of untrusted or malicious programs.
+Severity: High
+Fix: Remove or restrict the addition of user's private bin directory to the PATH.
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/.profile
+Path: training/.profile
+Vulnerability: Insecure Path Configuration
+Relevant code:
+if [ -d "$HOME/.local/bin" ] ; then
+
+    PATH="$HOME/.local/bin:$PATH"
+
+fi
+Description: The script adds user's private .local/bin directory to the PATH. This could lead to execution of untrusted or malicious programs.
+Severity: High
+Fix: Remove or restrict the addition of user's private .local/bin directory to the PATH.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/docker-compose.yml
+Path: training/docker-compose.yml
+Vulnerability: Security Misconfiguration
+Relevant code:
+ports:
+
+      - 80:80
+Description: The application is configured to expose the service port publicly, which can lead to unauthorized access.
+Severity: High
+Fix: Change the configuration to expose the service port only to trusted networks or use a reverse proxy for public access.
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/docker-compose.yml
+Path: training/docker-compose.yml
+Vulnerability: Insecure Data Storage
+Relevant code:
+- ./:/app
+Description: The application is configured to mount the entire project directory inside the container, which can lead to exposure of sensitive data.
+Severity: High
+Fix: Change the configuration to mount only necessary directories and files inside the container.
+
+FILE END
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/main.go
+Path: training/main.go
+Vulnerability: Sensitive Data Exposure
+Relevant code:
+users map[string]DBUser // name -> DBUser
+Description: The application stores sensitive information such as user passwords in plain text. This can lead to unauthorized access if the data is leaked or accessed.
+Severity: High
+Fix: Implement a secure method of storing passwords, such as hashing with a salt.
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/main.go
+Path: training/main.go
+Vulnerability: Broken Authentication
+Relevant code:
+u := DBUser{
+
+        User:      data["user"],
+
+        Password:  data["password"],
+
+        Flag:      data["flag"],
+
+        Timestamp: time.Now().Unix(),
+
+    }
+Description: The application does not implement any password complexity requirements or checks. This can lead to weak passwords that are easy to guess or crack.
+Severity: High
+Fix: Implement password complexity requirements and checks, such as minimum length, and the inclusion of uppercase letters, lowercase letters, numbers, and special characters.
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/main.go
+Path: training/main.go
+Vulnerability: Insecure Direct Object References (IDOR)
+Relevant code:
+if user.Password != data["password"] {
+
+        return errors.New("wrong password")
+
+    }
+Description: The application directly uses user input to verify passwords. This can lead to unauthorized access if an attacker is able to manipulate the input.
+Severity: High
+Fix: Implement a secure method of verifying passwords, such as hashing the input and comparing it to the stored hash.
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/main.go
+Path: training/main.go
+Vulnerability: Broken Access Control
+Relevant code:
+cookieStr, signatureStr, err := signCookie(cookie)
+Description: The application uses a cookie to store user session information, but does not properly validate the cookie. This can lead to unauthorized access if an attacker is able to manipulate the cookie.
+Severity: High
+Fix: Implement a secure method of validating cookies, such as signing them with a secret key and verifying the signature on each request.
+
+Direct code link: /Users/dmitry/projects/ctf-training/training/training/main.go
+Path: training/main.go
+Vulnerability: Uncontrolled Resource Consumption
+Relevant code:
+mu.Lock()
+
+    defer mu.Unlock()
+Description: The application uses a mutex to control access to shared resources, but does not properly manage the mutex. This can lead to resource exhaustion and denial of service if an attacker is able to cause the mutex to be locked for a long period of time.
+Severity: Medium
+Fix: Implement a timeout for mutex locks to prevent them from being held for too long.
+
+FILE END
+
