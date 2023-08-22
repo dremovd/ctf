@@ -231,9 +231,12 @@ def chagpt_analyze(file_description: File, code: str, project_structure: List[Fi
     }
 
     response = simple_completion(dict_input, system_prompt, debug=debug, needs_gpt4=True)
-    vulnerabilities_dict = json.loads(response)
     vulnerabilities = []
-    
+    try:
+        vulnerabilities_dict = json.loads(response)
+    except json.decoder.JSONDecodeError:
+        return vulnerabilities
+
     if isinstance(vulnerabilities_dict, dict):
         vulnerabilities_dict = [vulnerabilities_dict]
 
