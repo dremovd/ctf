@@ -199,6 +199,7 @@ checklist = """
     Insecure Deserialization - Untrusted data affecting object creation; Check serialization methods, object creation, etc.
     XML External Entity (XXE) - External entity references in XML; Check XML parsers for external entity inclusion.
     Cross-Site Request Forgery (CSRF) - Forged requests made by user; Look for lack of anti-CSRF tokens in forms.
+    Path Traversal Attack - Accessing files and directories outside the intended directory; Look for unfiltered user input in file paths.
     Insecure Direct Object References (IDOR) - Access to unauthorized objects; Check object references without proper access controls.
     Server-Side Request Forgery (SSRF) - Requests sent to internal resources; Look for user-supplied URLs affecting server requests.
     Unvalidated Redirects and Forwards - Redirecting to untrusted URLs; Check for user parameters in redirects.
@@ -232,6 +233,10 @@ def chagpt_analyze(file_description: File, code: str, project_structure: List[Fi
     response = simple_completion(dict_input, system_prompt, debug=debug, needs_gpt4=True)
     vulnerabilities_dict = json.loads(response)
     vulnerabilities = []
+    
+    if isinstance(vulnerabilities_dict, dict):
+        vulnerabilities_dict = [vulnerabilities_dict]
+
     for vulnerability_dict in vulnerabilities_dict:
         try:
             vulnerability = Vulnerability(
@@ -246,7 +251,6 @@ def chagpt_analyze(file_description: File, code: str, project_structure: List[Fi
             )
         except AttributeError:
             print(f'RESPONSE FORMAT ERROR:\n{vulnerability_dict}')
-            raise
 
         vulnerabilities.append(vulnerability)
     return vulnerabilities
