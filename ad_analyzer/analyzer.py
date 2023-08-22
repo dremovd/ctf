@@ -70,15 +70,15 @@ def list_service_directory(service_root: str, debug: bool = False) -> Tuple[List
 
             need_skip = False
             is_binary = is_binary_file(filepath)
+            lines_count = sum(1 for line in open(filepath, 'r', encoding='utf-8', errors='ignore')) if not is_binary_file(filepath) else 0
 
             for ignore_prefix in IGNORE_FILENAMES_PREFIXES:
                 if filename.startswith(ignore_prefix):
                     need_skip = True
                     break
-            if is_binary or need_skip or filename in IGNORE_FILENAMES_LIST:
+            if lines_count == 0 or is_binary or need_skip or filename in IGNORE_FILENAMES_LIST:
                 continue
             
-            lines_count = sum(1 for line in open(filepath, 'r', encoding='utf-8', errors='ignore')) if not is_binary_file(filepath) else 0
             file_description = File(
                 root=service_root,
                 path=relative_filepath, 
