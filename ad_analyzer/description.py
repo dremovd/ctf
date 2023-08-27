@@ -15,12 +15,13 @@ class Vulnerability(object):
         self.root = root
 
     def __str__(self) -> str:
+        code = '\n'.join([line for line in self.relevant_code.split("\n") if line.strip()])
         lines = [
             f'Direct code link: {os.path.join(self.root, self.path)}',
             f'Path: {self.path}',
             f'Vulnerability: {self.name}',
             f'Code line: {self.line}',
-            f'Relevant code:\n{self.relevant_code}',
+            f'Relevant code:\n{code}',
             f'Description: {self.description}',
             f'Severity: {self.severity}',
             f'Fix: {self.code_fix}',

@@ -3,6 +3,7 @@ import os
 from tqdm.auto import tqdm
 import pickle
 import hashlib
+import argparse
 
 from prompting import chagpt_analyze
 from description import Vulnerability, File, Directory
@@ -10,10 +11,14 @@ import tiktoken
 
 tokenizer = tiktoken.encoding_for_model("gpt-4")
 
-SERVICE_ROOT = '/Users/dmitry/projects/ctf-training/amogus_plus_plus'
+def parse_arguments():
+    parser = argparse.ArgumentParser(description="Provide the service root directory.")
+    parser.add_argument("--service-root", default="./service", type=str,
+                        help="Path to the service root directory. Default is ./service")
+    args = parser.parse_args()
+    return args.service_root
 
-from typing import List, Tuple
-import os
+SERVICE_ROOT = parse_arguments()
 
 IGNORE_FILENAMES_LIST = set([
     '.DS_Store',
@@ -22,6 +27,11 @@ IGNORE_FILENAMES_LIST = set([
     'package-lock.json',
     '.prettierrc',
     '.prettierignore',
+    '.bashrc',
+    '.bash_logout',
+    'go.sum',
+    '.profile',
+    'go.mod',
 ])
 IGNORE_FILENAMES_PREFIXES = [
     '.git',
@@ -151,10 +161,10 @@ def analyze_vulnerability(service_root: str, output: TextIO, debug=False) -> Lis
             print()
 
         output.write(
-            '\n\n'.join(
+            '\n\n'.join([
                 str(file_vulnerability)
                 for file_vulnerability in file_vulnerabilities
-            )
+            ] + ['FILE END', ''])
         )
         output.flush()
 
