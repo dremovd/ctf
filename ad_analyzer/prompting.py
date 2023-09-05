@@ -197,30 +197,21 @@ checklist = """
     HTTP Verb Tampering - Exploiting alternative HTTP methods; Check for proper handling and filtering of HTTP methods like POST, PUT, DELETE.
     Parameter Tampering - Manipulation of parameters in URL, cookies, request body; Look for improper validation of parameters and strict method handling.
     Security Misconfiguration - Default, incomplete, or ad-hoc configurations; Check for unnecessary services, default credentials, etc.
-    Using Components with Known Vulnerabilities - Using outdated libraries; Check versions of third-party components and libraries.
     Insecure Deserialization - Untrusted data affecting object creation; Check serialization methods, object creation, etc.
     XML External Entity (XXE) - External entity references in XML; Check XML parsers for external entity inclusion.
-    Cross-Site Request Forgery (CSRF) - Forged requests made by user; Look for lack of anti-CSRF tokens in forms.
     Path Traversal Attack - Accessing files and directories outside the intended directory; Look for unfiltered user input in file paths.
     Insecure Direct Object References (IDOR) - Access to unauthorized objects; Check object references without proper access controls.
     Server-Side Request Forgery (SSRF) - Requests sent to internal resources; Look for user-supplied URLs affecting server requests.
     Unvalidated Redirects and Forwards - Redirecting to untrusted URLs; Check for user parameters in redirects.
-    Insufficient Logging and Monitoring - Lack of or ineffective logging; Ensure proper logging of authentication, access, etc.
     Insecure Data Storage - Inadequate protection of stored data; Check for proper encryption and access controls on stored data.
     Weak Cryptography - Using weak or outdated cryptographic algorithms; Verify algorithms used for encryption, hashing, etc.
     Uncontrolled Resource Consumption - Leading to Denial of Service; Look for lack of rate limiting, resource-intensive operations, etc.
-    Misconfigured CORS - Improper Cross-Origin Resource Sharing; Verify CORS policies and proper origin validation.
-    Clickjacking - Embedding UI into malicious sites; Check for lack of X-Frame-Options header.
     Unvalidated File Uploads - Malicious file uploads; Check for lack of file type validation, improper permissions, etc.
     Exposed Administrative Interfaces - Unprotected admin panels; Look for lack of authentication on administrative endpoints.
     Hardcoded Secrets - Credentials or secrets in code; Check source code for hardcoded passwords, API keys, etc.
-    Password Management Weaknesses - Insecure handling of passwords; Look for lack of hashing, weak password policies, etc.
     Missing Function Level Access Control - Inadequate protection of functions; Check for exposed internal functions, lack of authentication, etc.
-    Open Redirects - Redirecting to malicious sites; Check for unvalidated user input in redirect URLs.
     API Security Misconfiguration - Inadequate protection of APIs; Check for weak authentication, lack of input validation in APIs.
     Information Leakage - Exposing sensitive information in errors, etc.; Check for detailed error messages, stack traces, etc.
-    Inadequate Transport Layer Protection - Weak encryption during data transfer; Look for outdated TLS, weak ciphers, etc.
-    Abuse of Functionality - Misusing application functions; Look for lack of proper rate limiting, role checks, etc.
     Improper Certificate Validation - Ignoring or mishandling certificate errors; Check for improper SSL certificate validation.
 """
 
