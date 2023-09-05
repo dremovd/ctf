@@ -101,3 +101,29 @@ This file is responsible for all interactions with the OpenAI API. It handles te
 ## Usage
 
 (TBD)
+
+## Usage
+
+### Running the Application Directly with Python
+
+To run the application directly using Python, navigate to the project directory and run the following command:
+
+\`\`\`bash
+python analyzer.py --service-root /path/to/service/source
+\`\`\`
+
+### Running the Application with Docker
+
+1. Build the Docker image:
+
+\`\`\`bash
+docker build -t ad-analyzer .
+\`\`\`
+
+2. Run the Docker container:
+
+\`\`\`bash
+docker run ad-analyzer --service-root /path/to/service/source
+\`\`\`
+
+In both examples, replace `/path/to/service/source` with the actual path to the service source code you want to analyze.
