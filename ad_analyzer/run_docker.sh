@@ -1,0 +1,1 @@
+docker build -t ad-analyzer . ; docker run --rm --mount type=bind,source=/Users/dmitry/projects/ICC2022-AD-CTF/services/service2/src,target=/service_root,readonly --mount type=bind,source=./vulnerabilities,target=/usr/src/app/vulnerabilities ad-analyzer --service-root /service_root 

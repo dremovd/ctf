@@ -1,3 +1,7 @@
 tqdm
 openai
 tiktoken
+langchain
+fastapi
+uvicorn
+python-multipart

@@ -1,26 +1,33 @@
 from typing import Dict
 import os
+import re
 
 __all__ = ['Vulnerability', 'Directory', 'File']
 
+line_number_re = re.compile(r'^(\d+):')
 class Vulnerability(object):
-    def __init__(self, root:str, path: str, line: int=None, relevant_code : str=None, name: str=None, description: str=None, severity: str=None, code_fix: str=None) -> None:
+    def __init__(self, root:str, path: str, relevant_code : str=None, name: str=None, description: str=None, severity: str=None, code_fix: str=None) -> None:
         self.path = path
-        self.line = line
         self.relevant_code = relevant_code
         self.name = name
         self.description = description
         self.severity = severity
         self.code_fix = code_fix
         self.root = root
+        self.line_numbers = []
+        for line in relevant_code.split("\n"):
+            match = line_number_re.match(line)
+            if match:
+                self.line_numbers.append(int(match.group(1)))
 
     def __str__(self) -> str:
         code = '\n'.join([line for line in self.relevant_code.split("\n") if line.strip()])
+        line_numbers = ",".join(map(str, self.line_numbers))
         lines = [
             f'Direct code link: {os.path.join(self.root, self.path)}',
             f'Path: {self.path}',
             f'Vulnerability: {self.name}',
-            f'Code line: {self.line}',
+            f'Code lines: {line_numbers}',
             f'Relevant code:\n{code}',
             f'Description: {self.description}',
             f'Severity: {self.severity}',
@@ -31,7 +38,7 @@ class Vulnerability(object):
     def as_dict(self) -> Dict:
         return {
             'path': self.path,
-            'line': self.line,
+            'line_numbers': self.line_numbers,
             'relevant_code': self.relevant_code,
             'name': self.name,
             'description': self.description,

@@ -3,22 +3,13 @@ import os
 from tqdm.auto import tqdm
 import pickle
 import hashlib
-import argparse
 
 from prompting import chagpt_analyze
 from description import Vulnerability, File, Directory
 import tiktoken
+from datetime import datetime
 
 tokenizer = tiktoken.encoding_for_model("gpt-4")
-
-def parse_arguments():
-    parser = argparse.ArgumentParser(description="Provide the service root directory.")
-    parser.add_argument("--service-root", default="./service", type=str,
-                        help="Path to the service root directory. Default is ./service")
-    args = parser.parse_args()
-    return args.service_root
-
-SERVICE_ROOT = parse_arguments()
 
 IGNORE_FILENAMES_LIST = set([
     '.DS_Store',
@@ -33,6 +24,7 @@ IGNORE_FILENAMES_LIST = set([
     '.profile',
     'go.mod',
 ])
+
 IGNORE_FILENAMES_PREFIXES = [
     '.git',
     '.idea',
@@ -117,7 +109,10 @@ def analyze_file(service_root: str, file_description: File, project_structure: L
 
     filepath = os.path.join(service_root, file_description.path)
     with open(filepath, 'r', encoding='utf-8', errors='ignore') as file:
-        code_lines = file.readlines()
+        code_lines = [
+            f'{line_number + 1}:\t{line}' 
+            for line_number, line in enumerate(file.readlines())
+        ]
         code = '\n'.join(code_lines)
 
     tokens = tokenizer.encode(code)
@@ -143,7 +138,7 @@ def analyze_vulnerability(service_root: str, output: TextIO, debug=False) -> Lis
     analyzed_files = []
     # Create a unique identifier for the service_root
     service_root_hash = hashlib.sha256(service_root.encode()).hexdigest()
-    state_file = f'analyzed_files_{service_root_hash}.pickle'
+    state_file = f'vulnerabilities/{service_root_hash}.pickle'
     
     try:
         with open(state_file, 'rb') as state_f:
@@ -177,7 +172,24 @@ def analyze_vulnerability(service_root: str, output: TextIO, debug=False) -> Lis
 
     return vulnerabilities
 
+def parse_arguments():
+    parser = argparse.ArgumentParser(description="Provide the service root directory.")
+    parser.add_argument("--service-root", default="./service", type=str,
+                        help="Path to the service root directory. Default is ./service")
+    args = parser.parse_args()
+    return args.service_root
+
+
 if __name__ == '__main__':
-    output_file = f'vulnerabilities_{hashlib.sha256(SERVICE_ROOT.encode()).hexdigest()}.txt'
+    import argparse
+    SERVICE_ROOT = parse_arguments()
+
+    print(f"{SERVICE_ROOT = }")
+    timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+    service_root_hash = hashlib.sha256(SERVICE_ROOT.encode()).hexdigest()
+    service_name = os.path.basename(SERVICE_ROOT)
+    output_file_name = f'{timestamp}_{service_name}_{service_root_hash}.txt'
+
+    output_file = f'vulnerabilities/{output_file_name}.txt'
     with open(output_file, 'a') as output:
         vulnerabilities = analyze_vulnerability(SERVICE_ROOT, output, debug=False)

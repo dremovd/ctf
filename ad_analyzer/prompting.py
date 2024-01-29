@@ -5,28 +5,14 @@ import time
 import openai
 
 from description import Vulnerability, File, Directory
+from examples import examples  
 
 from secret import openai_key
 openai.api_key = openai_key
 
-models = [value['id'] for value in openai.Model.list()['data']]
-print('\n'.join(sorted([model for model in models if model.startswith('gpt')])))
-
-gpt4_models = ['gpt-4-0613', 'gpt-4'] 
-assert all(model in models for model in gpt4_models)
-current_gpt4_model_index = 0
-
-gpt3_models = ['gpt-3.5-turbo', 'gpt-3.5-turbo-0613']
-assert all(model in models for model in gpt3_models)
-current_gpt3_model_index = 0
-
-
-MODEL_PRICES = {
-    "input_token": 0.001 * 0.03,
-    "output_token": 0.001 * 0.06,
-}
-RATE_LIMIT_DELAY = 20
-UNAVAILABLE_LIMIT_DELAY = 10
+from langchain.chat_models import ChatOpenAI
+from langchain.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
 
 def normalize_output(text):
     paragraphs = text.split('\n')
@@ -48,145 +34,36 @@ def normalize_paragraph(paragraph):
     sentences = [s.strip() for s in sentences if s.strip()]
     return ' '.join(sentences)
 
-"""Helper function for generating text using the OpenAI API."""
 
-def chat_generate_text(
-    prompt: str,
-    model: str = "gpt-3.5-turbo",
-    system_prompt: str = "You are a helpful assistant.",
-    temperature: float = 0,
-    max_tokens: int = 2048,
-    n: int = 1,
-    stop: Optional[str | list] = None,
-    presence_penalty: float = 0,
-    frequency_penalty: float = 0.1,
-    debug=False,
-) -> List[str]:
-    """
-    chat_generate_text - Generates text using the OpenAI API.
-    :param str prompt: prompt for the model
-    :param str openai_api_key: api key for the OpenAI API, defaults to None
-    :param str model: model to use, defaults to "gpt-3.5-turbo"
-    :param str system_prompt: initial prompt for the model, defaults to "You are a helpful assistant."
-    :param float temperature: _description_, defaults to 0
-    :param int max_tokens: _description_, defaults to 1024
-    :param int n: _description_, defaults to 1
-    :param Optional[Union[str, list]] stop: _description_, defaults to None
-    :param float presence_penalty: _description_, defaults to 0
-    :param float frequency_penalty: _description_, defaults to 0.1
-    :return List[str]: _description_
-    """
-    messages = [
-        {"role": "system", "content": f"{system_prompt}"},
-        {"role": "user", "content": prompt},
-    ]
-
-    if debug:
-        print("DEBUG: messages")
-        for message in messages:
-            print("ROLE: {role}\nCONTENT:\n```{content}```".format(**message))
-
-    response = openai.ChatCompletion.create(
-        model=model,
-        messages=messages,
-        temperature=temperature,
-        max_tokens=max_tokens,
-        n=n,
-        stop=stop,
-        presence_penalty=presence_penalty,
-        frequency_penalty=frequency_penalty,
-    )
-
-    generated_texts = [
-        choice.message["content"].strip() 
-        for choice in response["choices"]
-    ]
-    if debug:
-        cost = (
-            MODEL_PRICES["input_token"] * response['usage']['prompt_tokens']
-            + MODEL_PRICES["output_token"] * response['usage']['completion_tokens']
-        )
-        print(f"API cost: ${cost}")
-
-    return generated_texts
-
-
-def simple_completion(dict_input: Dict, system_prompt: str, debug: bool=False, needs_gpt4=False, temperature : float=0):
-    if debug:
-        print("PROMPT:")
-        print(system_prompt)
-
-        print("INPUT:")
-        print(json.dumps(dict_input, separators=(',', ':'), indent=2))
-        print()
-
-    input = json.dumps(dict_input, separators=(',', ':'))
-
-    max_retries = 3
-    retries = 0
-    while retries < max_retries:
-        try:
-            if needs_gpt4:
-                global current_gpt4_model_index
-                model = gpt4_models[current_gpt4_model_index % len(gpt4_models)]
-                current_gpt4_model_index += 1
-            else:
-                global current_gpt3_model_index
-                model = gpt3_models[current_gpt3_model_index % len(gpt3_models)]
-                current_gpt3_model_index += 1
-            if debug:
-                print(f'Using model {model}')
-            results = chat_generate_text(
-                prompt=input,
-                model=model,
-                system_prompt=system_prompt,
-                debug=debug,
-                temperature=temperature,
-                n=1,
-            )
-            return normalize_code_output(results[0])
-        except openai.error.RateLimitError as e:
-            print(f"RateLimitError occurred. Retrying in {RATE_LIMIT_DELAY} seconds...")
-            time.sleep(RATE_LIMIT_DELAY)
-        except openai.error.ServiceUnavailableError:
-            print(f"ServiceUnavailableError occurred. Retrying in {UNAVAILABLE_LIMIT_DELAY} seconds...")
-            time.sleep(UNAVAILABLE_LIMIT_DELAY)            
-        except openai.error.APIError as e:
-            if e.args[0] == 502 and 'Bad gateway.' in str(e):
-                if debug:
-                    print(f"APIError occurred (Bad Gateway). Retrying {retries + 1} of {max_retries}...")
-                retries += 1
-                if retries == max_retries:
-                    raise Exception("Maximum retries reached. Unable to complete the request due to Bad Gateway.")
-                time.sleep(1)  # Optional delay before retrying
-            else:
-                raise e  # Re-raise the exception if it's not the specific error we're handling
-
+examples_formatted = "\n\n".join([
+    f"OUTPUT EXAMPLE {i + 1}:\n{json.dumps(example, separators=(',', ':'), indent=2)}" 
+    for i, example in enumerate(examples)
+])
 system_prompt = """
-    TASK:
-    You are an information security specialist.
-    You need to prevent unauthorized data access for a web project. 
-    This project source code was leaked.
-    Your input formatted as a JSON with the following structure:
-    - PROJECT_STRUCTURE: A project structure as a list of directories and file names.
-    - FILE_DESCRIPTION: File properties.
-    - CODE: A source code of the project.
-    - VULNERABILITIES_CHECKLIST: A checklist for vulnurabities you need to check. You need to check all of them, but you are not limited to them.
+TASK:
+Position: Cybersecurity Expert.
+Goal: Prevent unauthorized data exploitation in a web project after source code exposure.
+Input: JSON format including:
+- PROJECT_STRUCTURE: Detailed map of project's file and directory structure.
+- FILE_DESCRIPTION: Specifics and metadata of each file.
+- CODE: The complete source code with line numbers.
+- VULNERABILITIES_CHECKLIST: Required checklist for vulnerability scanning.
 
-    RESPONSE FORMAT:
-    Your response shoule be strictly formatted as a JSON file with the following structure:
-    List of vulnerabilities, each of the following structure: 
-    - relevant_code: <source code line in vulnerability : str>
-    - name: <vulnerability name : str>
-    - description: <vulnerability description : str>
-    - severity: <how simple is to get unauthorized data using this vulnerability: str>
-    - code_fix: <changes in the relevant code needed to fix vulnerability : str>
+RESPONSE FORMAT:
+Your response should be a JSON file encapsulating:
+- relevant_code: <Vulnerable code segments with line references>
+- name: <Type of vulnerability detected>
+- description: <Elaborate explanation of each vulnerability>
+- severity: <Risk assessment regarding unauthorized data access>
+- code_fix: <Proposed code changes in .diff format to address the vulnerability>
 
-    NOTE:
-    Please, strictly check all the source code including configuration, each function and each class method.
-    For each block of source code output only the most severe vulnerability.
-    Please, strictly output only JSON formatted list of vulnerabilities.
+{examples_formatted}
+
+NOTE:
+Thoroughly scrutinize every part of the source code, including configuration files, functions, and methods. In each analysis, focus on identifying the most severe vulnerability. Responses must strictly be in JSON format, listing vulnerabilities only.
 """
+
+print(system_prompt)
 
 checklist = """
     Injection Attacks - Untrusted data sent to an interpreter; Look for unsanitized input in SQL queries, OS commands, etc.
@@ -214,16 +91,40 @@ checklist = """
     Information Leakage - Exposing sensitive information in errors, etc.; Check for detailed error messages, stack traces, etc.
     Improper Certificate Validation - Ignoring or mishandling certificate errors; Check for improper SSL certificate validation.
 """
+dict_prompt = """{dict_input}"""
+
+llm = ChatOpenAI(
+    openai_api_key=openai_key,
+    model='gpt-4-1106-preview',
+    temperature=0,
+    max_tokens=4096,
+)
+
+prompt = ChatPromptTemplate.from_messages([
+    ("system", system_prompt),
+    ("user", dict_prompt),
+])
+
+output_parser = StrOutputParser()
+chain_solution = prompt | llm | output_parser
 
 def chagpt_analyze(file_description: File, code: str, project_structure: List[File | Directory], debug=False):
-    dict_input = {
+    dict_input = str({
         "PROJECT_STRUCTURE": [entity.as_dict() for entity in project_structure],
         "FILE_DESCRIPTION": file_description.as_dict(),
         "CODE": code,
         "VULNERABILITIES_CHECKLIST": [line.strip() for line in checklist.split('\n') if line.strip()][:30],
-    }
+    })
 
-    response = simple_completion(dict_input, system_prompt, debug=debug, needs_gpt4=True)
+    response = chain_solution.invoke({
+        "dict_input": dict_input,
+        "examples_formatted": examples_formatted,
+    }).strip()
+    if response.startswith('```json'):
+        response = response[7:].strip()
+    if response.endswith('```'):
+        response = response[:-3].strip()
+
     vulnerabilities = []
     try:
         vulnerabilities_dict = json.loads(response)
@@ -238,7 +139,6 @@ def chagpt_analyze(file_description: File, code: str, project_structure: List[Fi
             vulnerability = Vulnerability(
                 root=file_description.root,
                 path=file_description.path,
-                line=None,
                 relevant_code=vulnerability_dict.get('relevant_code', None),
                 name=vulnerability_dict.get('name', None),
                 description=vulnerability_dict.get('description', None),
@@ -260,4 +160,5 @@ if __name__ == '__main__':
         extension=".py",
         is_binary=False,
     )
-    chagpt_analyze(file_description=test_file_description, code="# Test code\n\nprint('Hello world!')", project_structure=[test_file_description], debug=True)
+    result = chagpt_analyze(file_description=test_file_description, code="# Test code\n\nprint('Hello world!')", project_structure=[test_file_description], debug=True)
+    print(result)

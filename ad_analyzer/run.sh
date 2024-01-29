@@ -1,0 +1,1 @@
+python3 analyzer.py --service-root /Users/dmitry/projects/ICC2022-AD-CTF/services/service2/src
