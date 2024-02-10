@@ -8,5 +8,7 @@ git clone https://github.com/SibirCTF/2023-service-sibirctf-sx
 docker-compose up --build
 # Open a port (if you need to share the service and you have a "white" IP)
 sudo ufw allow 3080/tcp
+# Check docker logs of docker container
+docker logs -f conveyor-conveyor-1
 ```
 
